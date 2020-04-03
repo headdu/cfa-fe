@@ -1,4 +1,4 @@
-const socket = new WebSocket("ws://cf-aveiro.herokuapp.com");
+const socket = new WebSocket("wss://cf-aveiro.herokuapp.com");
 
 export function createRoom() {
   socket.send(JSON.stringify({ type: "create" }));
