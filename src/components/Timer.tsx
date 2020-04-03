@@ -13,7 +13,7 @@ export default function Timer({
 }) {
   const [start, setStart] = React.useState(Date.now()+1000);
   const [synced, setSynced] = React.useState(false)
-  const [content, setContent] = React.useState(time);
+  const [content, setContent] = React.useState(time + 1);
 
 
   React.useEffect(() => {
