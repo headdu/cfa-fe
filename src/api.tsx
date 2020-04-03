@@ -105,4 +105,14 @@ export function sync() {
   }))
 }
 
+export function ping() {
+  setInterval(() => {
+    socket.send(JSON.stringify({
+      type: 'ping'
+    }))
+  } , 5000)
+}
+
+socket.addEventListener('open', ping)
+
 export default socket

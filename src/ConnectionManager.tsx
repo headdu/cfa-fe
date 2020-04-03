@@ -4,11 +4,10 @@ import socket from './api'
 
 export default function ConnectionManager() {
   const context = React.useContext(CounterContext)
-  console.log(context)
 
   const handleMessage = (message: MessageEvent) => {
     const parsedMessage = JSON.parse(message.data)
-    console.log(parsedMessage);
+
     switch(parsedMessage.type) {
       case 'createSuccess':
         context.setRoomUuid(parsedMessage.uuid)
@@ -27,10 +26,21 @@ export default function ConnectionManager() {
     }
   }
 
+  const leaveRoom = () => {
+    context.setRoomUuid('')
+    context.setAdmin(false)
+    context.setCurrentStep(0)
+    context.setCounterConfig(null)
+  }
+
   React.useEffect(() => {
     socket.addEventListener('message', handleMessage)
+    socket.addEventListener('close', leaveRoom)
 
-    return () => socket.removeEventListener('message', handleMessage)
+    return () => {
+      socket.removeEventListener('message', handleMessage)
+      socket.removeEventListener("close", leaveRoom);
+    }
   })
 
   return null

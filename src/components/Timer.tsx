@@ -26,7 +26,7 @@ export default function Timer({
   React.useEffect(() => {
     let diff: number, seconds;
     diff = time - (Date.now() - start) / 1000;
-    if (Math.round(diff) > 0) {
+    if (Math.round(diff) >= 0) {
       setTimeout(() => {
         // get the number of seconds that have elapsed since
         // startTimer() was called
