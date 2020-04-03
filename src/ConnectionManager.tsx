@@ -20,6 +20,9 @@ export default function ConnectionManager() {
         context.setCounterConfig(parsedMessage.config)
         context.setCurrentStep(0)
         break
+      case 'closeGroup':
+        leaveRoom()
+        break
       case 'sync':
         context.setCurrentStep(context.currentStep + 1)
         break
