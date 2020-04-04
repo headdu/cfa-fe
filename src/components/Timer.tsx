@@ -1,4 +1,4 @@
-import React from "react";
+import React, { AudioHTMLAttributes } from "react";
 import { sync } from "../api";
 import { Flex } from "rebass";
 
@@ -14,7 +14,15 @@ export default function Timer({
   const [start, setStart] = React.useState(Date.now()+1000);
   const [synced, setSynced] = React.useState(false)
   const [content, setContent] = React.useState(time + 1);
+  const audioRef = React.useRef<HTMLAudioElement>(null);
 
+  const isToBeep = (actualSeconds:number) => {
+    return (
+      Math.round(actualSeconds) > 0 &&
+      Math.round(actualSeconds) <= 3 &&
+      Math.round(content) !== Math.round(actualSeconds)
+    );
+  }
 
   React.useEffect(() => {
     setStart(Date.now());
@@ -26,19 +34,23 @@ export default function Timer({
   React.useEffect(() => {
     let diff: number, seconds;
     diff = time - (Date.now() - start) / 1000;
-    if (Math.round(diff) >= 0) {
+    if (Number.parseFloat(diff.toFixed(1)) > 0.5) {
       setTimeout(() => {
         // get the number of seconds that have elapsed since
         // startTimer() was called
 
         // does the same job as parseInt truncates the float
         seconds = diff % 60;
+        if(isToBeep(seconds)) {
+            console.log('seconds', seconds);
+            if(audioRef.current) audioRef.current.play()
+        }
         setContent(seconds);
       }, 50);
     } else if (!synced && isAdmin) {
       setSynced(true);
       sync();
-      
+
     }
   }, [time, start, isAdmin, content, synced]);
 
@@ -47,6 +59,7 @@ export default function Timer({
     <Flex flexDirection="column" alignItems="center">
       <h1>{label}</h1>
       <h1>{Math.round(content)}</h1>
+      <audio ref={audioRef} src="./assets/beep.mp3" controls />
     </Flex>
   );
 }
