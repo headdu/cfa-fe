@@ -1,8 +1,8 @@
 import React from "react";
-import { Flex, Button, Box } from "rebass";
+import { Flex, Box, Heading } from "rebass";
 import CounterContext from "../CounterContext";
 import Timer from "./Timer";
-import { setTabata, setRest } from "../api";
+import TimerBuilder from "./TimerBuilder";
 
 export default function Room() {
   const context = React.useContext(CounterContext);
@@ -15,37 +15,36 @@ export default function Room() {
     <Box
       sx={{
         px: 4,
-        py: 6,
-        backgroundImage: "url(https://source.unsplash.com/random/1024x768?sky)",
-        backgroundSize: "cover",
-        color: "white",
-        bg: "gray",
-        height: "100%",
+        py: 4,
+        color: 'white',
+        backgroundColor: "black",
+        flex: 1,
         display: "flex",
-        flexDirection: "column"
+        flexDirection: "column",
       }}
     >
-      <Flex 
+      <Flex
         flex={1}
         alignItems="center"
         justifyContent="space-between"
-        flexDirection="column">
-        <p>Room id: {context.roomUuid}</p>
+        flexDirection="column"
+      >
+        <Heading textAlign="center" fontSize={[5, 6]} my={2}>
+          Room id: {context.roomUuid}
+        </Heading>
         {context.counterConfig && currentTimer ? (
           <Timer
             label={currentTimer.label}
             time={currentTimer.seconds / 1000}
             isAdmin={context.isAdmin}
           />
+        ) : context.isAdmin ? (
+          <>
+            <TimerBuilder />
+          </>
         ) : (
-          "Waiting for Admin"
+          <Heading>Waiting for Admin</Heading>
         )}
-        {context.isAdmin ? (
-          <Flex justifyContent="space-between" alignSelf="stretch">
-            <Button onClick={setTabata}>Start Tabata</Button>
-            <Button onClick={setRest}>Start Rest</Button>
-          </Flex>
-        ) : null}
       </Flex>
     </Box>
   );
