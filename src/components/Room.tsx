@@ -11,6 +11,16 @@ export default function Room() {
     context.counterConfig && context.currentStep < context.counterConfig.length
       ? context.counterConfig[context.currentStep]
       : null;
+
+  if (!currentTimer) {
+    const backgroundBox = document.getElementById("background") as HTMLElement;
+    if (backgroundBox) {
+      backgroundBox.style.backgroundImage = "url(./assets/cfakettlebell.jpg)";
+      backgroundBox.style.backgroundSize = "cover";
+      backgroundBox.style.backgroundPosition = "center";
+    }
+  }
+
   return (
     <Box
       id="background"
