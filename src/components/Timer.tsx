@@ -92,7 +92,7 @@ export default function Timer({
         // startTimer() was called
 
         // does the same job as parseInt truncates the float
-        if (isToBeep(diff, content)) {
+        if (isToBeep(Math.ceil(diff), Math.ceil(content))) {
           playBeep();
         }
         setContent(diff);
