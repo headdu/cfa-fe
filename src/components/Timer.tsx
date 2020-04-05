@@ -116,9 +116,9 @@ export default function Timer({
   ]);
 
   return (
-    <Flex flexDirection="column" alignItems="center">
-      <h1>{label}</h1>
-      <h1>{getCountdownString(content)}</h1>
+    <Flex flexDirection="column" justifyContent="center" alignItems="center" flex="1" alignSelf="center">
+      <h1 style={{fontSize:'3rem'}} >{label}</h1>
+      <h1 style={{fontSize:'4rem'}} >{getCountdownString(content)}</h1>
     </Flex>
   );
 }
