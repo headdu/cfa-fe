@@ -8,56 +8,63 @@ export default function Home() {
   return (
     <Box
       sx={{
-        px: 4,
-        py: 6,
-        backgroundImage: "url(https://source.unsplash.com/random/1024x768?sky)",
-        backgroundSize: "cover",
+        px: 1,
+        py: 1,
         color: "white",
-        bg: "gray",
         height: "100%",
         display: "flex",
-        flexDirection: "column"
+        flexDirection: "column",
+        backgroundColor: 'black',
+        flex: 1
       }}
     >
       <Heading textAlign="center" fontSize={[5, 6]}>
-        WeTimer
+        CFA Timer
       </Heading>
 
       {isJoining ? (
         <Flex flex={1} alignItems="center">
-
-        <form
-          style={{
-            flex: 1
-          }}
-          onSubmit={(e: FormEvent<HTMLFormElement>) => {
-            e.preventDefault();
-            joinRoom((e.target as any)[0].value);
-          }}
-        >
-          <Flex alignItems="center" justifyContent="center" flexDirection="column">
-            <Input
-              id="roomId"
-              name="roomId"
-              type="text"
-              placeholder="Room Id"
-              required
-              sx={{
-                marginBottom: 32
-              }}
-            />
-            <Button type="submit" variant="primary" mr={1} sx={{ width: "60%" }}>
-              Join Room
-            </Button>
-          </Flex>
-        </form>
+          <form
+            style={{
+              flex: 1,
+            }}
+            onSubmit={(e: FormEvent<HTMLFormElement>) => {
+              e.preventDefault();
+              joinRoom((e.target as any)[0].value);
+            }}
+          >
+            <Flex
+              alignItems="center"
+              justifyContent="center"
+              flexDirection="column"
+            >
+              <Input
+                id="roomId"
+                name="roomId"
+                type="text"
+                placeholder="Room Id"
+                required
+                sx={{
+                  marginBottom: 32,
+                }}
+              />
+              <Button
+                type="submit"
+                variant="primary"
+                mr={1}
+                sx={{ width: "60%" }}
+              >
+                Join Room
+              </Button>
+            </Flex>
+          </form>
         </Flex>
       ) : (
         <Flex
           sx={{
             flex: 1,
             justifyContent: "center",
-            alignItems: "center"
+            alignItems: "center",
           }}
         >
           <Box
@@ -67,7 +74,7 @@ export default function Home() {
             sx={{
               alignItems: "center",
               justifyContent: "center",
-              display: "flex"
+              display: "flex",
             }}
           >
             <Button
@@ -86,7 +93,7 @@ export default function Home() {
             sx={{
               alignItems: "center",
               justifyContent: "center",
-              display: "flex"
+              display: "flex",
             }}
           >
             <Button
