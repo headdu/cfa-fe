@@ -35,66 +35,82 @@ export function setTabata() {
         {
           label: "GO!",
           seconds: 20000,
+          type: "WORK",
         },
         {
           label: "Rest",
           seconds: 10000,
+          type: "REST",
         },
         {
           label: "GO!",
           seconds: 20000,
+          type: "WORK",
         },
         {
           label: "Rest",
           seconds: 10000,
+          type: "REST",
         },
         {
           label: "GO!",
           seconds: 20000,
+          type: "WORK",
         },
         {
           label: "Rest",
           seconds: 10000,
+          type: "REST",
         },
         {
           label: "GO!",
           seconds: 20000,
+          type: "WORK",
         },
         {
           label: "Rest",
           seconds: 10000,
+          type: "REST",
         },
         {
           label: "GO!",
           seconds: 20000,
+          type: "WORK",
         },
         {
           label: "Rest",
           seconds: 10000,
+          type: "REST",
         },
         {
           label: "GO!",
           seconds: 20000,
+          type: "WORK",
         },
         {
           label: "Rest",
           seconds: 10000,
+          type: "REST",
         },
         {
           label: "GO!",
           seconds: 20000,
+          type: "WORK",
         },
         {
           label: "Rest",
           seconds: 10000,
+          type: "REST",
         },
         {
           label: "GO!",
           seconds: 20000,
+          type: "WORK",
         },
         {
           label: "Rest",
           seconds: 10000,
+          type: "REST",
         },
       ],
     })
@@ -109,6 +125,7 @@ export function setRest() {
         {
           label: "Rest",
           seconds: 60000,
+          type: "REST"
         },
       ],
     })

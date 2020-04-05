@@ -11,13 +11,27 @@ export default function Room() {
     context.counterConfig && context.currentStep < context.counterConfig.length
       ? context.counterConfig[context.currentStep]
       : null;
+
+  if (!currentTimer) {
+    const backgroundBox = document.getElementById("background") as HTMLElement;
+    if (backgroundBox) {
+      backgroundBox.style.backgroundImage = "url(./assets/cfakettlebell.jpg)";
+      backgroundBox.style.backgroundSize = "cover";
+      backgroundBox.style.backgroundPosition = "center";
+    }
+  }
+
   return (
     <Box
+      id="background"
       sx={{
         px: 4,
         py: 4,
-        color: 'white',
-        backgroundColor: "black",
+        color: "white",
+        backgroundImage: "url(./assets/cfakettlebell.jpg)",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        opacity: 1,
         flex: 1,
         display: "flex",
         flexDirection: "column",
@@ -35,6 +49,7 @@ export default function Room() {
         {context.counterConfig && currentTimer ? (
           <Timer
             label={currentTimer.label}
+            type={currentTimer.type}
             time={currentTimer.seconds / 1000}
             isAdmin={context.isAdmin}
           />
