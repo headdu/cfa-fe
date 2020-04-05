@@ -15,6 +15,7 @@ export default function Room() {
   if (!currentTimer) {
     const backgroundBox = document.getElementById("background") as HTMLElement;
     if (backgroundBox) {
+      backgroundBox.style.background = '';
       backgroundBox.style.backgroundImage = "url(./assets/cfakettlebell.jpg)";
       backgroundBox.style.backgroundSize = "cover";
       backgroundBox.style.backgroundPosition = "center";

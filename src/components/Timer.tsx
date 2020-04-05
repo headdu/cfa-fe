@@ -36,34 +36,10 @@ const getCountdownString = (timeLeft: number) => {
   return countdownString;
 };
 
-export default function Timer({
-  label,
-  time,
-  isAdmin,
-  type,
-}: {
-  label: string;
-  time: number;
-  isAdmin: boolean;
-  type: string;
-}) {
-  const [startDate, setStart] = React.useState<any>(null);
-  const [synced, setSynced] = React.useState(false);
-  const [content, setContent] = React.useState(time);
-  const backgroundBox = document.getElementById("background") as HTMLElement;
-
-  React.useEffect(() => {
-    setStart(null);
-    setSynced(false);
-    setContent(time);
-  }, [
-    label,
-    time,
-  ]);
-
-  // we don't want to wait a full second before the timer starts
-
-  React.useEffect(() => {
+const setTimer = (time: number, setContent: any, type: string) => {
+  const start = Date.now();
+  let prevContent = Number.MAX_SAFE_INTEGER;
+  let interval = setInterval(() => {
     const beepSound = document.getElementById("beep") as HTMLAudioElement;
 
     const playBeep = () => {
@@ -78,42 +54,60 @@ export default function Timer({
       }
     };
 
-    const start = startDate || Date.now();
-    if (!startDate) {
-      setStart(start);
-    }
-
     let diff: number;
     diff = time - (Date.now() - start) / 1000;
 
-    if (Number.parseFloat(diff.toFixed(1)) > 0) {
-      setTimeout(() => {
-        // get the number of seconds that have elapsed since
-        // startTimer() was called
+    // get the number of seconds that have elapsed since
+    // startTimer() was called
 
-        // does the same job as parseInt truncates the float
-        if (isToBeep(Math.ceil(diff), Math.ceil(content))) {
-          playBeep();
-        }
-        setContent(diff);
-        backgroundBox.style.background = `linear-gradient(to top, ${
-          type === "WORK" ? "green" : type === "REST" ? "red" : "blue"
-        } ${((diff - 1) * 100) / time}%,transparent 100%)`;
-      }, 50);
-    } else if (!synced && isAdmin) {
+    // does the same job as parseInt truncates the float
+    if (isToBeep(Math.ceil(diff), Math.ceil(prevContent))) {
+      playBeep();
+    }
+    if (diff <= 0) {
+      clearInterval(interval);
+    }
+    setContent(diff);
+    prevContent = diff;
+    requestAnimationFrame(() => {
+      const backgroundBox = document.getElementById(
+        "background"
+      ) as HTMLElement;
+      backgroundBox.style.background = `linear-gradient(to top, ${
+        type === "WORK" ? "green" : type === "REST" ? "red" : "blue"
+      } ${((diff - 1) * 100) / time}%,transparent 100%)`;
+    });
+  }, 50);
+};
+
+export default function Timer({
+  label,
+  time,
+  isAdmin,
+  type,
+}: {
+  label: string;
+  time: number;
+  isAdmin: boolean;
+  type: string;
+}) {
+  const [synced, setSynced] = React.useState(false);
+  const [content, setContent] = React.useState(time);
+
+  React.useEffect(() => {
+    setSynced(false);
+    setContent(time);
+    setTimer(time, setContent, type);
+  }, [label, time, type]);
+
+  // we don't want to wait a full second before the timer starts
+
+  React.useEffect(() => {
+    if (isAdmin && Number.parseFloat(content.toFixed(1)) <= 0 && !synced) {
       setSynced(true);
       sync();
     }
-  }, [
-    time,
-    startDate,
-    isAdmin,
-    content,
-    synced,
-    backgroundBox.style.background,
-    type,
-    backgroundBox.style.backgroundColor,
-  ]);
+  }, [isAdmin, content, synced]);
 
   return (
     <Flex flexDirection="column" alignItems="center">
