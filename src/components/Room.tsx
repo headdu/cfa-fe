@@ -13,19 +13,16 @@ export default function Room() {
       : null;
   return (
     <Box
+      id="background"
       sx={{
         px: 4,
         py: 6,
-        backgroundImage: "url(https://source.unsplash.com/random/1024x768?sky)",
-        backgroundSize: "cover",
-        color: "white",
-        bg: "gray",
         height: "100%",
         display: "flex",
-        flexDirection: "column"
+        flexDirection: "column",
       }}
     >
-      <Flex 
+      <Flex
         flex={1}
         alignItems="center"
         justifyContent="space-between"

@@ -7,6 +7,8 @@ import CounterContext from "./CounterContext";
 import ConnectionManager from "./ConnectionManager";
 import Home from "./components/Home";
 import Room from "./components/Room";
+import { Box } from "rebass";
+import { url } from "inspector";
 
 function App() {
   const [roomUuid, setRoomUuid] = React.useState("");
@@ -25,12 +27,30 @@ function App() {
           currentStep,
           setCurrentStep,
           isAdmin,
-          setAdmin
+          setAdmin,
         }}
       >
         <ConnectionManager />
-        {roomUuid ? <Room /> : <Home />}
-        <audio id="beep" src="./assets/beep.mp3" controls style={{display:"none"}}/>
+        <Box
+          sx={{
+            bg: "white",
+            color: "black",
+            height: "100%",
+            background: "url(./assets/logo.svg) no-repeat center",
+            backgroundSize: "80%",
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          {roomUuid ? <Room /> : <Home />}
+          <audio
+            id="beep"
+            src="./assets/beep.mp3"
+            controls
+            style={{ display: "none" }}
+          />
+        </Box>
       </CounterContext.Provider>
     </ThemeProvider>
   );

@@ -15,21 +15,38 @@ export default function Home() {
       sx={{
         px: 4,
         py: 6,
-        backgroundImage: "url(https://source.unsplash.com/random/1024x768?sky)",
-        backgroundSize: "cover",
-        color: "white",
-        bg: "gray",
         height: "100%",
         display: "flex",
         flexDirection: "column",
+        backgroundImage: "url(./assets/black.jpg)",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        color: "white",
+        width: "100%",
       }}
     >
-      <Heading textAlign="center" fontSize={[5, 6]}>
-        WeTimer
-      </Heading>
+      <img
+        style={{ height: "30%", width: "100%" }}
+        src="./assets/logo.svg"
+      ></img>
 
       {isJoining ? (
         <Flex flex={1} alignItems="center">
+          <Button
+            sx={{
+              width: "7vh",
+              height: "7vh",
+              borderRadius: "50%",
+              position: "absolute",
+              top: "5%",
+              left: "5%",
+              backgroundImage: "url(./assets/arrow.svg)",
+              backgroundPosition: "center",
+              backgroundSize: "5vh 5vh",
+              backgroundRepeat: "no-repeat",
+            }}
+            onClick={() => setIsJoining(false)}
+          ></Button>
           <form
             style={{
               flex: 1,
@@ -52,14 +69,17 @@ export default function Home() {
                 placeholder="Room Id"
                 required
                 sx={{
+                  width: "60%",
+                  color: "white",
                   marginBottom: 32,
+                  borderRadius: "20px",
                 }}
               />
               <Button
                 type="submit"
                 variant="primary"
                 mr={1}
-                sx={{ width: "60%" }}
+                sx={{ width: "60%", borderRadius: "20px" }}
               >
                 Join Room
               </Button>
@@ -72,6 +92,7 @@ export default function Home() {
             flex: 1,
             justifyContent: "center",
             alignItems: "center",
+            flexDirection: "column",
           }}
         >
           <Box
@@ -87,10 +108,10 @@ export default function Home() {
             <Button
               variant="secondary"
               mr={1}
-              sx={{ width: "60%" }}
+              sx={{ width: "100%", borderRadius: "20px" }}
               onClick={createRoomOnClick}
             >
-              Create
+              Create Timer
             </Button>
           </Box>
           <Box
@@ -107,9 +128,9 @@ export default function Home() {
               variant="primary"
               mr={1}
               onClick={() => setIsJoining(true)}
-              sx={{ width: "60%" }}
+              sx={{ width: "100%", borderRadius: "20px" }}
             >
-              Join
+              Join Room
             </Button>
           </Box>
         </Flex>
