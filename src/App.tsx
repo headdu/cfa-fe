@@ -30,6 +30,7 @@ function App() {
       >
         <ConnectionManager />
         {roomUuid ? <Room /> : <Home />}
+        <audio id="beep" src="./assets/beep.mp3" controls style={{display:"none"}}/>
       </CounterContext.Provider>
     </ThemeProvider>
   );

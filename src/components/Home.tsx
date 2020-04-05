@@ -5,6 +5,11 @@ import { createRoom, joinRoom } from "../api";
 
 export default function Home() {
   const [isJoining, setIsJoining] = React.useState(false);
+  const createRoomOnClick = () => {
+    createRoom();
+    (document.getElementById("beep") as HTMLAudioElement).load();
+  }
+
   return (
     <Box
       sx={{
@@ -31,6 +36,7 @@ export default function Home() {
             onSubmit={(e: FormEvent<HTMLFormElement>) => {
               e.preventDefault();
               joinRoom((e.target as any)[0].value);
+              (document.getElementById("beep") as HTMLAudioElement).load();
             }}
           >
             <Flex
@@ -81,7 +87,7 @@ export default function Home() {
               variant="secondary"
               mr={1}
               sx={{ width: "60%" }}
-              onClick={createRoom}
+              onClick={createRoomOnClick}
             >
               Create
             </Button>
