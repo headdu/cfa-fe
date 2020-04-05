@@ -1,7 +1,7 @@
 import React from "react";
 import logo from "./logo.svg";
 import { ThemeProvider } from "emotion-theming";
-import theme from "@rebass/preset";
+import theme from "./theme";
 import "./App.css";
 import CounterContext from "./CounterContext";
 import ConnectionManager from "./ConnectionManager";
