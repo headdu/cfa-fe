@@ -5,6 +5,11 @@ import { createRoom, joinRoom } from "../api";
 
 export default function Home() {
   const [isJoining, setIsJoining] = React.useState(false);
+  const createRoomOnClick = () => {
+    createRoom();
+    (document.getElementById("beep") as HTMLAudioElement).load();
+  }
+
   return (
     <Box
       sx={{
@@ -16,7 +21,7 @@ export default function Home() {
         bg: "gray",
         height: "100%",
         display: "flex",
-        flexDirection: "column"
+        flexDirection: "column",
       }}
     >
       <Heading textAlign="center" fontSize={[5, 6]}>
@@ -25,39 +30,48 @@ export default function Home() {
 
       {isJoining ? (
         <Flex flex={1} alignItems="center">
-
-        <form
-          style={{
-            flex: 1
-          }}
-          onSubmit={(e: FormEvent<HTMLFormElement>) => {
-            e.preventDefault();
-            joinRoom((e.target as any)[0].value);
-          }}
-        >
-          <Flex alignItems="center" justifyContent="center" flexDirection="column">
-            <Input
-              id="roomId"
-              name="roomId"
-              type="text"
-              placeholder="Room Id"
-              required
-              sx={{
-                marginBottom: 32
-              }}
-            />
-            <Button type="submit" variant="primary" mr={1} sx={{ width: "60%" }}>
-              Join Room
-            </Button>
-          </Flex>
-        </form>
+          <form
+            style={{
+              flex: 1,
+            }}
+            onSubmit={(e: FormEvent<HTMLFormElement>) => {
+              e.preventDefault();
+              joinRoom((e.target as any)[0].value);
+              (document.getElementById("beep") as HTMLAudioElement).load();
+            }}
+          >
+            <Flex
+              alignItems="center"
+              justifyContent="center"
+              flexDirection="column"
+            >
+              <Input
+                id="roomId"
+                name="roomId"
+                type="text"
+                placeholder="Room Id"
+                required
+                sx={{
+                  marginBottom: 32,
+                }}
+              />
+              <Button
+                type="submit"
+                variant="primary"
+                mr={1}
+                sx={{ width: "60%" }}
+              >
+                Join Room
+              </Button>
+            </Flex>
+          </form>
         </Flex>
       ) : (
         <Flex
           sx={{
             flex: 1,
             justifyContent: "center",
-            alignItems: "center"
+            alignItems: "center",
           }}
         >
           <Box
@@ -67,14 +81,14 @@ export default function Home() {
             sx={{
               alignItems: "center",
               justifyContent: "center",
-              display: "flex"
+              display: "flex",
             }}
           >
             <Button
               variant="secondary"
               mr={1}
               sx={{ width: "60%" }}
-              onClick={createRoom}
+              onClick={createRoomOnClick}
             >
               Create
             </Button>
@@ -86,7 +100,7 @@ export default function Home() {
             sx={{
               alignItems: "center",
               justifyContent: "center",
-              display: "flex"
+              display: "flex",
             }}
           >
             <Button

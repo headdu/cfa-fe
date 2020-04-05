@@ -1,4 +1,4 @@
-import React, { AudioHTMLAttributes } from "react";
+import React, { Component } from "react";
 import { sync } from "../api";
 import { Flex } from "rebass";
 
@@ -14,7 +14,7 @@ export default function Timer({
   const [start, setStart] = React.useState(Date.now()+1000);
   const [synced, setSynced] = React.useState(false)
   const [content, setContent] = React.useState(time + 1);
-  const audioRef = React.useRef<HTMLAudioElement>(null);
+  const beepSound = document.getElementById("beep") as HTMLAudioElement;
 
   const isToBeep = (actualSeconds:number) => {
     return (
@@ -22,6 +22,18 @@ export default function Timer({
       Math.round(actualSeconds) <= 3 &&
       Math.round(content) !== Math.round(actualSeconds)
     );
+  }
+
+  const playBeep = () => {
+    if (beepSound) {
+      beepSound.load();
+      const promise = beepSound.play()
+        .catch((error) =>{
+          //safari browser sometimes throws a exception when play the sound (poop)
+          //must catch it to not break anything!
+          console.error(error)
+        });
+    }
   }
 
   React.useEffect(() => {
@@ -42,8 +54,7 @@ export default function Timer({
         // does the same job as parseInt truncates the float
         seconds = diff % 60;
         if(isToBeep(seconds)) {
-            console.log('seconds', seconds);
-            if(audioRef.current) audioRef.current.play()
+          playBeep();
         }
         setContent(seconds);
       }, 50);
@@ -59,7 +70,6 @@ export default function Timer({
     <Flex flexDirection="column" alignItems="center">
       <h1>{label}</h1>
       <h1>{Math.round(content)}</h1>
-      <audio ref={audioRef} src="./assets/beep.mp3" controls />
     </Flex>
   );
 }
