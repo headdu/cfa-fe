@@ -15,7 +15,6 @@ export default function Home() {
       sx={{
         px: 4,
         py: 6,
-        height: "100%",
         display: "flex",
         flexDirection: "column",
         backgroundImage: "url(./assets/black.jpg)",
@@ -23,10 +22,11 @@ export default function Home() {
         backgroundPosition: "center",
         color: "white",
         width: "100%",
+        flex:1
       }}
     >
       <img
-        style={{ height: "30%", width: "100%" }}
+        style={{ height: "30%" }}
         src="./assets/logo.svg"
       ></img>
 

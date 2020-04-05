@@ -1,7 +1,7 @@
 import React from "react";
 import logo from "./logo.svg";
 import { ThemeProvider } from "emotion-theming";
-import theme from "@rebass/preset";
+import theme from "./theme";
 import "./App.css";
 import CounterContext from "./CounterContext";
 import ConnectionManager from "./ConnectionManager";
@@ -36,11 +36,12 @@ function App() {
             bg: "white",
             color: "black",
             height: "100%",
-            background: "url(./assets/logo.svg) no-repeat center",
+            background: "black url(./assets/logo.svg) no-repeat center",
             backgroundSize: "80%",
             width: "100%",
             display: "flex",
             flexDirection: "column",
+            flex: 1
           }}
         >
           {roomUuid ? <Room /> : <Home />}

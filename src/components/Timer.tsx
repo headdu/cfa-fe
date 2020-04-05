@@ -6,10 +6,12 @@ export default function Timer({
   label,
   time,
   isAdmin,
+  type
 }: {
   label: string;
   time: number;
   isAdmin: boolean;
+  type: string
 }) {
   const [start, setStart] = React.useState(Date.now() + 1000);
   const [synced, setSynced] = React.useState(false);
@@ -28,7 +30,7 @@ export default function Timer({
   const playBeep = () => {
     if (beepSound) {
       beepSound.load();
-      const promise = beepSound.play().catch((error) => {
+      beepSound.play().catch((error) => {
         //safari browser sometimes throws a exception when play the sound (poop)
         //must catch it to not break anything!
         console.error(error);
@@ -39,7 +41,11 @@ export default function Timer({
   React.useEffect(() => {
     setStart(Date.now());
     setSynced(false);
-    backgroundBox.style.backgroundImage = "none";
+    return () => {
+      backgroundBox.style.backgroundImage= "url(./assets/cfakettlebell.jpg)";
+      backgroundBox.style.backgroundSize= "cover";
+      backgroundBox.style.backgroundPosition= "center";
+    }
   }, [label, time]);
 
   // we don't want to wait a full second before the timer starts
@@ -64,7 +70,7 @@ export default function Timer({
       sync();
     }
     backgroundBox.style.background = `linear-gradient(to top, ${
-      time === 20 ? "green" : "red"
+      type === "WORK" ? "green" : type=== "REST" ? "red" : "blue"
     } ${((content - 1) * 100) / time}%,transparent 100%)`;
   }, [time, start, isAdmin, content, synced]);
 
