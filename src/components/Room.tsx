@@ -13,11 +13,15 @@ export default function Room() {
       : null;
   return (
     <Box
+      id="background"
       sx={{
         px: 4,
         py: 4,
-        color: 'white',
-        backgroundColor: "black",
+        color: "white",
+        backgroundImage: "url(./assets/cfakettlebell.jpg)",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        opacity: 1,
         flex: 1,
         display: "flex",
         flexDirection: "column",
@@ -35,6 +39,7 @@ export default function Room() {
         {context.counterConfig && currentTimer ? (
           <Timer
             label={currentTimer.label}
+            type={currentTimer.type}
             time={currentTimer.seconds / 1000}
             isAdmin={context.isAdmin}
           />
