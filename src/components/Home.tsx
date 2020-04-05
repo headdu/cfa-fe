@@ -13,19 +13,18 @@ export default function Home() {
   return (
     <Box
       sx={{
-        px: 4,
-        py: 6,
-        backgroundImage: "url(https://source.unsplash.com/random/1024x768?sky)",
-        backgroundSize: "cover",
+        px: 1,
+        py: 1,
         color: "white",
-        bg: "gray",
         height: "100%",
         display: "flex",
         flexDirection: "column",
+        backgroundColor: 'black',
+        flex: 1
       }}
     >
       <Heading textAlign="center" fontSize={[5, 6]}>
-        WeTimer
+        CFA Timer
       </Heading>
 
       {isJoining ? (
