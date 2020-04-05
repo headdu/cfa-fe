@@ -69,14 +69,11 @@ const setTimer = (time: number, setContent: any, type: string) => {
     }
     setContent(diff);
     prevContent = diff;
-    requestAnimationFrame(() => {
-      const backgroundBox = document.getElementById(
-        "background"
-      ) as HTMLElement;
-      backgroundBox.style.background = `linear-gradient(to top, ${
-        type === "WORK" ? "green" : type === "REST" ? "red" : "blue"
-      } ${((diff - 1) * 100) / time}%,transparent 100%)`;
-    });
+
+    const backgroundBox = document.getElementById("background") as HTMLElement;
+    backgroundBox.style.background = `linear-gradient(to top, ${
+      type === "WORK" ? "green" : type === "REST" ? "red" : "blue"
+    } ${((diff - 1) * 100) / time}%,transparent 100%)`;
   }, 50);
 };
 
@@ -110,9 +107,15 @@ export default function Timer({
   }, [isAdmin, content, synced]);
 
   return (
-    <Flex flexDirection="column" justifyContent="center" alignItems="center" flex="1" alignSelf="center">
-      <h1 style={{fontSize:'3rem'}} >{label}</h1>
-      <h1 style={{fontSize:'4rem'}} >{getCountdownString(content)}</h1>
+    <Flex
+      flexDirection="column"
+      justifyContent="center"
+      alignItems="center"
+      flex="1"
+      alignSelf="center"
+    >
+      <h1 style={{ fontSize: "3rem" }}>{label}</h1>
+      <h1 style={{ fontSize: "4rem" }}>{getCountdownString(content)}</h1>
     </Flex>
   );
 }
