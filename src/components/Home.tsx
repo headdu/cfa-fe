@@ -5,30 +5,43 @@ import { createRoom, joinRoom } from "../api";
 
 export default function Home() {
   const [isJoining, setIsJoining] = React.useState(false);
+
+  React.useEffect(() => {
+    //load background image before show the image
+    const backgroundImage = new Image();
+    backgroundImage.src = "./assets/black.jpg";
+    backgroundImage.onload = () => {
+      (document.getElementById(
+        "homeBackground"
+      ) as HTMLElement).style.opacity = "1";
+    };
+  }, []);
+
   const createRoomOnClick = () => {
     createRoom();
     (document.getElementById("beep") as HTMLAudioElement).load();
   }
 
+
   return (
     <Box
+      id="homeBackground"
       sx={{
         px: 4,
         py: 6,
+        opacity:0,
         display: "flex",
         flexDirection: "column",
-        backgroundImage: "url(./assets/black.jpg)",
+        background: "grey url(./assets/black.jpg)",
         backgroundSize: "cover",
         backgroundPosition: "center",
+        transition: "opacity 1s",
         color: "white",
         width: "100%",
-        flex:1
+        flex: 1,
       }}
     >
-      <img
-        style={{ height: "30%" }}
-        src="./assets/logo.svg"
-      ></img>
+      <img style={{ height: "30%", maxHeight: "30vh" }} src="./assets/logo.svg"></img>
 
       {isJoining ? (
         <Flex flex={1} alignItems="center">
