@@ -20,7 +20,7 @@ export default function Home() {
   const createRoomOnClick = () => {
     createRoom();
     (document.getElementById("beep") as HTMLAudioElement).load();
-  }
+  };
 
 
   return (
@@ -41,7 +41,11 @@ export default function Home() {
         flex: 1,
       }}
     >
-      <img style={{ height: "30%", maxHeight: "30vh" }} src="./assets/logo.svg"></img>
+      <img
+        style={{ height: "30%", maxHeight: "30vh" }}
+        src="./assets/logo.svg"
+        alt={"Crossfit Aveiro"}
+      ></img>
 
       {isJoining ? (
         <Flex flex={1} alignItems="center">

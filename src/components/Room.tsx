@@ -6,19 +6,21 @@ import TimerBuilder from "./TimerBuilder";
 
 export default function Room() {
   const context = React.useContext(CounterContext);
+  const [backgroundPct, setBackgroundPct] = React.useState<number | null>(null);
 
   const currentTimer =
     context.counterConfig && context.currentStep < context.counterConfig.length
       ? context.counterConfig[context.currentStep]
       : null;
 
-  if (!currentTimer) {
-    const backgroundBox = document.getElementById("background") as HTMLElement;
-    if (backgroundBox) {
-      backgroundBox.style.backgroundImage = "url(./assets/cfakettlebell.jpg)";
-      backgroundBox.style.backgroundSize = "cover";
-      backgroundBox.style.backgroundPosition = "center";
-    }
+  let backgroundString = "none";
+  if (backgroundPct && currentTimer) {
+    const type = currentTimer.type;
+    backgroundString = `linear-gradient(to top, ${
+      type === "WORK" ? "green" : type === "REST" ? "red" : "blue"
+    } ${backgroundPct}%,transparent 100%)`;
+  } else {
+    backgroundString = "url(./assets/cfakettlebell.jpg)";
   }
 
   return (
@@ -28,7 +30,7 @@ export default function Room() {
         px: 4,
         py: 4,
         color: "white",
-        backgroundImage: "url(./assets/cfakettlebell.jpg)",
+        background: backgroundString,
         backgroundSize: "cover",
         backgroundPosition: "center",
         opacity: 1,
@@ -52,6 +54,7 @@ export default function Room() {
             type={currentTimer.type}
             time={currentTimer.seconds / 1000}
             isAdmin={context.isAdmin}
+            setBackgroundPct={setBackgroundPct}
           />
         ) : context.isAdmin ? (
           <>
