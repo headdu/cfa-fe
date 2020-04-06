@@ -36,7 +36,12 @@ const getCountdownString = (timeLeft: number) => {
   return countdownString;
 };
 
-const setTimer = (time: number, setContent: any, type: string) => {
+const setTimer = (
+  time: number,
+  setContent: (content: number) => void,
+  type: string,
+  setBackgroundPct: (pct: number) => void
+) => {
   const start = Date.now();
   let prevContent = Number.MAX_SAFE_INTEGER;
   let interval = setInterval(() => {
@@ -69,11 +74,7 @@ const setTimer = (time: number, setContent: any, type: string) => {
     }
     setContent(diff);
     prevContent = diff;
-
-    const backgroundBox = document.getElementById("background") as HTMLElement;
-    backgroundBox.style.background = `linear-gradient(to top, ${
-      type === "WORK" ? "green" : type === "REST" ? "red" : "blue"
-    } ${((diff - 1) * 100) / time}%,transparent 100%)`;
+    setBackgroundPct(((diff - 1) * 100) / time)
   }, 50);
 };
 
@@ -82,11 +83,13 @@ export default function Timer({
   time,
   isAdmin,
   type,
+  setBackgroundPct,
 }: {
   label: string;
   time: number;
   isAdmin: boolean;
   type: string;
+  setBackgroundPct: (pct: number) => void;
 }) {
   const [synced, setSynced] = React.useState(false);
   const [content, setContent] = React.useState(time);
@@ -94,8 +97,8 @@ export default function Timer({
   React.useEffect(() => {
     setSynced(false);
     setContent(time);
-    setTimer(time, setContent, type);
-  }, [label, time, type]);
+    setTimer(time, setContent, type, setBackgroundPct);
+  }, [label, setBackgroundPct, time, type]);
 
   // we don't want to wait a full second before the timer starts
 
