@@ -8,7 +8,7 @@ export default function Home() {
   const createRoomOnClick = () => {
     createRoom();
     (document.getElementById("beep") as HTMLAudioElement).load();
-  }
+  };
 
   return (
     <Box
@@ -22,12 +22,13 @@ export default function Home() {
         backgroundPosition: "center",
         color: "white",
         width: "100%",
-        flex:1
+        flex: 1,
       }}
     >
       <img
-        style={{ height: "30%" }}
+        style={{ height: "30%", maxHeight: "500px" }}
         src="./assets/logo.svg"
+        alt={"Crossfit Aveiro"}
       ></img>
 
       {isJoining ? (
