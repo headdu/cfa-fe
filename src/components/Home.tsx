@@ -26,7 +26,7 @@ export default function Home() {
       }}
     >
       <img
-        style={{ height: "30%", maxHeight: "500px" }}
+        style={{ height: "30%", maxHeight: "30vh" }}
         src="./assets/logo.svg"
         alt={"Crossfit Aveiro"}
       ></img>
