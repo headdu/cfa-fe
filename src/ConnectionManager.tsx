@@ -17,14 +17,18 @@ export default function ConnectionManager() {
         context.setRoomUuid(parsedMessage.uuid);
         break;
       case "config":
+        context.resetConfig();
         context.setCounterConfig(parsedMessage.config);
-        context.setCurrentStep(0);
         break;
       case "closeGroup":
         leaveRoom();
         break;
       case "sync":
-        context.setCurrentStep(context.currentStep + 1);
+        if (parsedMessage.round === 0) {
+          context.resetConfig();
+        } else {
+          context.setCurrentStep(parsedMessage.round);
+        }
         break;
     }
   };
@@ -33,7 +37,7 @@ export default function ConnectionManager() {
     context.setRoomUuid("");
     context.setAdmin(false);
     context.setCurrentStep(0);
-    context.setCounterConfig(null);
+    context.setCounterConfig(undefined);
   };
 
   React.useEffect(() => {

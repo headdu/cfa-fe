@@ -8,13 +8,43 @@ import ConnectionManager from "./ConnectionManager";
 import Home from "./components/Home";
 import Room from "./components/Room";
 import { Box } from "rebass";
-import { url } from "inspector";
+import { ConfigItem, sync } from "./api";
 
 function App() {
   const [roomUuid, setRoomUuid] = React.useState("");
-  const [counterConfig, setCounterConfig] = React.useState<any[] | null>(null);
+  const [counterConfig, setCounterConfig] = React.useState<
+    ConfigItem[] | undefined
+  >(undefined);
   const [currentStep, setCurrentStep] = React.useState(0);
   const [isAdmin, setAdmin] = React.useState(false);
+
+  /**
+   * Reset current config and round
+   */
+  const resetConfig = () => {
+    setCurrentStep(0);
+    setCounterConfig(undefined);
+  };
+
+  /**
+   * Advance to next round
+   * If no next round available, reset config
+   * If admin, send sync message with next round
+   */
+  const advance = () => {
+    if (counterConfig) {
+      const nextRound =
+        currentStep < counterConfig.length - 1 ? currentStep + 1 : 0;
+      if (nextRound === 0) {
+        resetConfig();
+      } else {
+        setCurrentStep(nextRound);
+      }
+      if (isAdmin) {
+        sync(nextRound);
+      }
+    }
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -28,6 +58,8 @@ function App() {
           setCurrentStep,
           isAdmin,
           setAdmin,
+          resetConfig,
+          advance,
         }}
       >
         <ConnectionManager />
@@ -36,12 +68,14 @@ function App() {
             bg: "white",
             color: "black",
             height: "100%",
-            background: roomUuid ? "black url(./assets/logo.svg) no-repeat center" : "black",
+            background: roomUuid
+              ? "black url(./assets/logo.svg) no-repeat center"
+              : "black",
             backgroundSize: "80%",
             width: "100%",
             display: "flex",
             flexDirection: "column",
-            flex: 1
+            flex: 1,
           }}
         >
           {roomUuid ? <Room /> : <Home />}
