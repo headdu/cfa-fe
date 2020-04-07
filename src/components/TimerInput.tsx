@@ -1,4 +1,5 @@
 import React, { HTMLProps } from "react";
+import ReactDOM from 'react-dom'
 import { Input } from "@rebass/forms";
 import DurationTrack from "./DurationTrack";
 import debounce from "lodash/fp/debounce";
@@ -45,10 +46,10 @@ export default function TimerInput({
 }: TimerInputProps) {
   const [isPickerOpen, setIsPickerOpen] = React.useState(false);
   const [minutes, setMinutes] = React.useState<number | undefined>(() =>
-    value ? Math.floor(Number.parseInt(value as string)) / 60 : undefined
+    value ? Math.floor(Number.parseInt(value as string)) / 60 : 0
   );
   const [seconds, setSeconds] = React.useState<number | undefined>(() =>
-    value ? Number.parseInt(value as string) % 60 : undefined
+    value ? Number.parseInt(value as string) % 60 : 0
   );
 
   const debouncedPickerChange = debounce(250, onPickerChange);
@@ -69,44 +70,51 @@ export default function TimerInput({
         value={inputValue}
         {...props}
       />
-      {isPickerOpen ? (
-        <>
-          <div
-            style={{
-              position: "fixed",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-            }}
-            onClick={() => setIsPickerOpen(false)}
-          ></div>
-          <div
-            style={{
-              position: "fixed",
-              bottom: 0,
-              left: 0,
-              right: 0,
-              height: 256,
-              backgroundColor: "white",
-              display: "flex",
-            }}
-          >
-            <DurationTrack
-              qualifier={"Minutes"}
-              numbers={numbers}
-              value={minutes}
-              onChange={setMinutes}
-            />
-            <DurationTrack
-              qualifier={"Seconds"}
-              numbers={numbers}
-              value={seconds}
-              onChange={setSeconds}
-            />
-          </div>
-        </>
-      ) : null}
+      {isPickerOpen
+        ? ReactDOM.createPortal(
+            <>
+              <div
+                style={{
+                  position: "fixed",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                }}
+                onClick={() => setIsPickerOpen(false)}
+              ></div>
+              <div
+                style={{
+                  position: "fixed",
+                  bottom: -256,
+                  left: 0,
+                  right: 0,
+                  height: 256,
+                  backgroundColor: "white",
+                  display: "flex",
+                  borderTopRightRadius: 10,
+                  borderTopLeftRadius: 10,
+                  
+                }}
+                className="animate-scroll-up"
+              >
+                <DurationTrack
+                  qualifier={"Minutes"}
+                  numbers={numbers}
+                  value={minutes}
+                  onChange={setMinutes}
+                />
+                <DurationTrack
+                  qualifier={"Seconds"}
+                  numbers={numbers}
+                  value={seconds}
+                  onChange={setSeconds}
+                />
+              </div>
+            </>,
+            document.getElementsByTagName('body')[0]
+          )
+        : null}
     </>
   );
 }
