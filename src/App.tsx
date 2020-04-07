@@ -36,7 +36,7 @@ function App() {
             bg: "white",
             color: "black",
             height: "100%",
-            background: "black url(./assets/logo.svg) no-repeat center",
+            background: roomUuid ? "black url(./assets/logo.svg) no-repeat center" : "black",
             backgroundSize: "80%",
             width: "100%",
             display: "flex",
