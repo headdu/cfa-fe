@@ -44,12 +44,17 @@ const setTimer = (
 ) => {
   const start = Date.now();
   let prevContent = Number.MAX_SAFE_INTEGER;
-  let interval = setInterval(() => {
+  let interval: number;
+  const clear = () => {
+    if (interval) {
+      clearInterval(interval);
+    }
+  };
+  interval = setInterval(() => {
     const beepSound = document.getElementById("beep") as HTMLAudioElement;
 
     const playBeep = () => {
       if (beepSound) {
-        beepSound.load();
         beepSound.currentTime = 0;
         beepSound.play().catch((error) => {
           //safari browser sometimes throws a exception when play the sound (poop)
@@ -70,24 +75,26 @@ const setTimer = (
       playBeep();
     }
     if (diff <= 0) {
-      clearInterval(interval);
+      clear();
     }
     setContent(diff);
     prevContent = diff;
-    setBackgroundPct(((diff - 1) * 100) / time)
+    setBackgroundPct(((diff - 1) * 100) / time);
   }, 50);
+
+  return clear;
 };
 
 export default function Timer({
   label,
   time,
-  isAdmin,
+  advance,
   type,
   setBackgroundPct,
 }: {
   label: string;
   time: number;
-  isAdmin: boolean;
+  advance: () => void;
   type: string;
   setBackgroundPct: (pct: number) => void;
 }) {
@@ -97,17 +104,18 @@ export default function Timer({
   React.useEffect(() => {
     setSynced(false);
     setContent(time);
-    setTimer(time, setContent, type, setBackgroundPct);
+
+    return setTimer(time, setContent, type, setBackgroundPct);
   }, [label, setBackgroundPct, time, type]);
 
   // we don't want to wait a full second before the timer starts
 
   React.useEffect(() => {
-    if (isAdmin && Number.parseFloat(content.toFixed(1)) <= 0 && !synced) {
+    if (content <= 0 && !synced) {
       setSynced(true);
-      sync();
+      advance();
     }
-  }, [isAdmin, content, synced]);
+  }, [advance, content, synced]);
 
   return (
     <Flex

@@ -18,9 +18,9 @@ export function setConfig(config: ConfigItem[]) {
   socket.send(
     JSON.stringify({
       type: "config",
-      config
+      config,
     })
-    )
+  );
 }
 
 export function setTabata() {
@@ -125,28 +125,31 @@ export function setRest() {
         {
           label: "Rest",
           seconds: 60000,
-          type: "REST"
+          type: "REST",
         },
       ],
     })
   );
 }
 
-export function sync() {
+export function sync(nextRound: number) {
   socket.send(
     JSON.stringify({
       type: "sync",
+      round: nextRound
     })
   );
 }
 
 export function ping() {
   setInterval(() => {
-    socket.send(
-      JSON.stringify({
-        type: "ping",
-      })
-    );
+    if (socket.readyState === socket.OPEN) {
+      socket.send(
+        JSON.stringify({
+          type: "ping",
+        })
+      );
+    }
   }, 5000);
 }
 

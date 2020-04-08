@@ -50,10 +50,11 @@ export default function Room() {
         </Heading>
         {context.counterConfig && currentTimer ? (
           <Timer
+            key={currentTimer.label + context.currentStep}
             label={currentTimer.label}
             type={currentTimer.type}
             time={currentTimer.seconds / 1000}
-            isAdmin={context.isAdmin}
+            advance={context.advance}
             setBackgroundPct={setBackgroundPct}
           />
         ) : context.isAdmin ? (
