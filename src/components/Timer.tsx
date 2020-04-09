@@ -10,15 +10,17 @@ const isToBeep = (actualSeconds: number, prevSeconds: number) => {
   );
 };
 
-const getCountdownString = (timeLeft: number) => {
+const getCountdownString = (timeLeft: number, inverseTimer: boolean) => {
   let countdownString = "";
   const minutes = Math.floor(Math.ceil(timeLeft) / 60);
   if (minutes) {
     if (minutes < 10) {
-      countdownString = countdownString + `0${minutes}:`;
+      countdownString += `0${minutes}:`;
     } else {
-      countdownString = countdownString + `${minutes}:`;
+      countdownString += `${minutes}:`;
     }
+  } else if (inverseTimer) {
+    countdownString += '00:';
   }
 
   const seconds = Math.round(Math.ceil(timeLeft) % 60);
@@ -100,6 +102,7 @@ export default function Timer({
 }) {
   const [synced, setSynced] = React.useState(false);
   const [content, setContent] = React.useState(time);
+  const [inverseTimer, setInverseTimer] = React.useState(false);
 
   React.useEffect(() => {
     setSynced(false);
@@ -124,9 +127,26 @@ export default function Timer({
       alignItems="center"
       flex="1"
       alignSelf="center"
+      width="100%"
     >
       <h1 style={{ fontSize: "3rem" }}>{label}</h1>
-      <h1 style={{ fontSize: "4rem" }}>{getCountdownString(content)}</h1>
+      <Flex
+        justifyContent="center"
+        alignItems="center"
+        flex="1"
+        alignSelf="center"
+        width="100%"
+        style={{ position: "relative" }}
+      >
+        <h1 style={{ fontSize: "4rem" }}>
+          {getCountdownString(inverseTimer ? time - content : content, inverseTimer)}
+        </h1>
+        {type === "REST" || type === "WORK" ? <img
+          src={inverseTimer ? "./assets/sort-inverse.svg" : "./assets/sort.svg"}
+          style={{ position: "absolute", right: 0, height: "2rem" }}
+          onClick={() => setInverseTimer(!inverseTimer)}
+        /> : null}
+      </Flex>
     </Flex>
   );
 }
