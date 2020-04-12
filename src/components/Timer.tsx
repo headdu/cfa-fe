@@ -23,7 +23,7 @@ const getCountdownString = (timeLeft: number, inverseTimer: boolean) => {
     countdownString += '00:';
   }
 
-  const seconds = Math.round(Math.ceil(timeLeft) % 60);
+  const seconds = inverseTimer ? Math.round(Math.floor(timeLeft) % 60) : Math.round(Math.ceil(timeLeft) % 60);
 
   if (seconds !== 60) {
     if (seconds < 10) {
@@ -93,16 +93,19 @@ export default function Timer({
   advance,
   type,
   setBackgroundPct,
+  inverseTimer,
+  setInverseTimer
 }: {
   label: string;
   time: number;
   advance: () => void;
   type: string;
   setBackgroundPct: (pct: number) => void;
+  inverseTimer: boolean;
+  setInverseTimer: (inverseTimer: boolean) => void
 }) {
   const [synced, setSynced] = React.useState(false);
   const [content, setContent] = React.useState(time);
-  const [inverseTimer, setInverseTimer] = React.useState(false);
 
   React.useEffect(() => {
     setSynced(false);
@@ -131,21 +134,27 @@ export default function Timer({
     >
       <h1 style={{ fontSize: "3rem" }}>{label}</h1>
       <Flex
-        justifyContent="center"
+        justifyContent="space-evenly"
         alignItems="center"
         flex="1"
         alignSelf="center"
         width="100%"
-        style={{ position: "relative" }}
       >
         <h1 style={{ fontSize: "4rem" }}>
-          {getCountdownString(inverseTimer ? time - content : content, inverseTimer)}
+          {getCountdownString(
+            inverseTimer ? time - content : content,
+            inverseTimer
+          )}
         </h1>
-        {type === "REST" || type === "WORK" ? <img
-          src={inverseTimer ? "./assets/sort-inverse.svg" : "./assets/sort.svg"}
-          style={{ position: "absolute", right: 0, height: "2rem" }}
-          onClick={() => setInverseTimer(!inverseTimer)}
-        /> : null}
+        {type === "REST" || type === "WORK" ? (
+          <img
+            src={
+              inverseTimer ? "./assets/sort-inverse.svg" : "./assets/sort.svg"
+            }
+            style={{ height: "3rem" }}
+            onClick={() => setInverseTimer(!inverseTimer)}
+          />
+        ) : null}
       </Flex>
     </Flex>
   );
