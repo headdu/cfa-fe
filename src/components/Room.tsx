@@ -1,8 +1,9 @@
 import React from "react";
-import { Flex, Box, Heading } from "rebass";
+import { Box, Flex, Heading } from "rebass";
 import CounterContext from "../CounterContext";
 import Timer from "./Timer";
 import TimerBuilder from "./TimerBuilder";
+import Counter from "./Counter";
 
 export default function Room() {
   const context = React.useContext(CounterContext);
@@ -23,6 +24,31 @@ export default function Room() {
   } else {
     backgroundString = "url(./assets/cfakettlebell.jpg)";
   }
+
+  const [totalRounds, setTotalRounds] = React.useState<number>(0);
+  const [round, setRound] = React.useState<number>(0);
+
+  React.useEffect(() => {
+    if (
+      context.counterConfig &&
+      context.counterConfig[context.currentStep] &&
+      context.counterConfig[context.currentStep].type === "WORK"
+    ) {
+      setRound(round + 1);
+    }
+  }, [context.counterConfig, context.currentStep]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  React.useEffect(() => {
+    let ttlRounds = 0;
+
+    if (context.counterConfig) {
+      ttlRounds = context.counterConfig.filter(
+        (x: { type: string }) => x.type === "WORK"
+      ).length;
+    }
+    setTotalRounds(ttlRounds);
+    setRound(0);
+  }, [context.counterConfig]);
 
   return (
     <Box
@@ -50,16 +76,21 @@ export default function Room() {
           Room id: {context.roomUuid}
         </Heading>
         {context.counterConfig && currentTimer ? (
-          <Timer
-            key={currentTimer.label + context.currentStep}
-            label={currentTimer.label}
-            type={currentTimer.type}
-            time={currentTimer.seconds / 1000}
-            advance={context.advance}
-            setBackgroundPct={setBackgroundPct}
-            inverseTimer = {inverseTimer}
-            setInverseTimer = {setInverseTimer}
-          />
+          <>
+            {currentTimer.type !== "COUNTDOWN" ? (
+              <Counter totalRounds={totalRounds} rounds={round} />
+            ) : null}
+            <Timer
+              key={currentTimer.label + context.currentStep}
+              label={currentTimer.label}
+              type={currentTimer.type}
+              time={currentTimer.seconds / 1000}
+              advance={context.advance}
+              setBackgroundPct={setBackgroundPct}
+              inverseTimer={inverseTimer}
+              setInverseTimer={setInverseTimer}
+            />
+          </>
         ) : context.isAdmin ? (
           <>
             <TimerBuilder />
