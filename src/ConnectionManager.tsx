@@ -21,7 +21,10 @@ export default function ConnectionManager() {
         context.setCounterConfig(parsedMessage.config);
         break;
       case "closeGroup":
-        leaveRoom();
+        context.setWarning(
+          "Admin left the room. Click here to leave this room",
+          leaveRoom
+        );
         break;
       case "sync":
         if (parsedMessage.round === 0) {
@@ -38,15 +41,23 @@ export default function ConnectionManager() {
     context.setAdmin(false);
     context.setCurrentStep(0);
     context.setCounterConfig(undefined);
+    context.setWarning("", () => null);
+  };
+
+  const displayWarning = () => {
+    context.setWarning(
+      "Connection lost. Click here to return to homepage",
+      () => window.location.reload(false)
+    );
   };
 
   React.useEffect(() => {
     socket.addEventListener("message", handleMessage);
-    socket.addEventListener("close", leaveRoom);
+    socket.addEventListener("close", displayWarning);
 
     return () => {
       socket.removeEventListener("message", handleMessage);
-      socket.removeEventListener("close", leaveRoom);
+      socket.removeEventListener("close", displayWarning);
     };
   });
 
