@@ -141,10 +141,12 @@ export default function Timer({
         width="100%"
       >
         <h1 style={{ fontSize: "4rem" }}>
-          {getCountdownString(
-            inverseTimer ? time - content : content,
-            inverseTimer
-          )}
+          {type === "REST" || type === "WORK"
+            ? getCountdownString(
+                inverseTimer ? time - content : content,
+                inverseTimer
+              )
+            : getCountdownString(content, false)}
         </h1>
         {type === "REST" || type === "WORK" ? (
           <img
