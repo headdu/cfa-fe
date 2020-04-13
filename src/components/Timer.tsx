@@ -1,5 +1,4 @@
 import React from "react";
-import { sync } from "../api";
 import { Flex } from "rebass";
 
 const isToBeep = (actualSeconds: number, prevSeconds: number) => {
@@ -12,7 +11,8 @@ const isToBeep = (actualSeconds: number, prevSeconds: number) => {
 
 const getCountdownString = (timeLeft: number, inverseTimer: boolean) => {
   let countdownString = "";
-  const minutes = Math.floor(Math.ceil(timeLeft) / 60);
+  const numberTransform = inverseTimer ? Math.floor : Math.ceil;
+  const minutes = Math.floor(numberTransform(timeLeft) / 60);
   if (minutes) {
     if (minutes < 10) {
       countdownString += `0${minutes}:`;
@@ -23,7 +23,7 @@ const getCountdownString = (timeLeft: number, inverseTimer: boolean) => {
     countdownString += '00:';
   }
 
-  const seconds = inverseTimer ? Math.round(Math.floor(timeLeft) % 60) : Math.round(Math.ceil(timeLeft) % 60);
+  const seconds = Math.round(numberTransform(timeLeft) % 60);
 
   if (seconds !== 60) {
     if (seconds < 10) {
