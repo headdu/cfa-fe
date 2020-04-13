@@ -81,7 +81,7 @@ function App() {
           {roomUuid ? <Room /> : <Home />}
           <audio
             id="beep"
-            src="./assets/beep.mp3"
+            src="./assets/beep.wav"
             controls
             style={{ display: "none" }}
           />

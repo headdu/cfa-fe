@@ -10,18 +10,20 @@ const isToBeep = (actualSeconds: number, prevSeconds: number) => {
   );
 };
 
-const getCountdownString = (timeLeft: number) => {
+const getCountdownString = (timeLeft: number, inverseTimer: boolean) => {
   let countdownString = "";
   const minutes = Math.floor(Math.ceil(timeLeft) / 60);
   if (minutes) {
     if (minutes < 10) {
-      countdownString = countdownString + `0${minutes}:`;
+      countdownString += `0${minutes}:`;
     } else {
-      countdownString = countdownString + `${minutes}:`;
+      countdownString += `${minutes}:`;
     }
+  } else if (inverseTimer) {
+    countdownString += '00:';
   }
 
-  const seconds = Math.round(Math.ceil(timeLeft) % 60);
+  const seconds = inverseTimer ? Math.round(Math.floor(timeLeft) % 60) : Math.round(Math.ceil(timeLeft) % 60);
 
   if (seconds !== 60) {
     if (seconds < 10) {
@@ -91,12 +93,16 @@ export default function Timer({
   advance,
   type,
   setBackgroundPct,
+  inverseTimer,
+  setInverseTimer
 }: {
   label: string;
   time: number;
   advance: () => void;
   type: string;
   setBackgroundPct: (pct: number) => void;
+  inverseTimer: boolean;
+  setInverseTimer: (inverseTimer: boolean) => void
 }) {
   const [synced, setSynced] = React.useState(false);
   const [content, setContent] = React.useState(time);
@@ -124,9 +130,34 @@ export default function Timer({
       alignItems="center"
       flex="1"
       alignSelf="center"
+      width="100%"
     >
       <h1 style={{ fontSize: "3rem" }}>{label}</h1>
-      <h1 style={{ fontSize: "4rem" }}>{getCountdownString(content)}</h1>
+      <Flex
+        justifyContent="space-evenly"
+        alignItems="center"
+        flex="1"
+        alignSelf="center"
+        width="100%"
+      >
+        <h1 style={{ fontSize: "4rem" }}>
+          {type === "REST" || type === "WORK"
+            ? getCountdownString(
+                inverseTimer ? time - content : content,
+                inverseTimer
+              )
+            : getCountdownString(content, false)}
+        </h1>
+        {type === "REST" || type === "WORK" ? (
+          <img
+            src={
+              inverseTimer ? "./assets/sort-inverse.svg" : "./assets/sort.svg"
+            }
+            style={{ height: "3rem" }}
+            onClick={() => setInverseTimer(!inverseTimer)}
+          />
+        ) : null}
+      </Flex>
     </Flex>
   );
 }

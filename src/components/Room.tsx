@@ -7,6 +7,7 @@ import TimerBuilder from "./TimerBuilder";
 export default function Room() {
   const context = React.useContext(CounterContext);
   const [backgroundPct, setBackgroundPct] = React.useState<number | null>(null);
+  const [inverseTimer, setInverseTimer] = React.useState(false);
 
   const currentTimer =
     context.counterConfig && context.currentStep < context.counterConfig.length
@@ -56,6 +57,8 @@ export default function Room() {
             time={currentTimer.seconds / 1000}
             advance={context.advance}
             setBackgroundPct={setBackgroundPct}
+            inverseTimer = {inverseTimer}
+            setInverseTimer = {setInverseTimer}
           />
         ) : context.isAdmin ? (
           <>
