@@ -26,7 +26,6 @@ export default function Room() {
 
     const [totalRounds, setTotalRounds] = React.useState<number>(0);
     const [round, setRound] = React.useState<number>(0);
-    const [totalTimer, setTotalTimer] = React.useState<number>(0);
 
     React.useEffect(() => {
         if (context.counterConfig && context.counterConfig[context.currentStep] && context.counterConfig[context.currentStep].type === 'WORK') {
@@ -35,20 +34,12 @@ export default function Room() {
     }, [context.counterConfig, context.currentStep]);
 
     React.useEffect(() => {
-        let ttlRounds = 0, ttlTimer = 0;
+        let ttlRounds = 0;
 
         if (context.counterConfig) {
-            for (const config of context.counterConfig) {
-                if (config.type === 'WORK') {
-                    ttlRounds++;
-                }
-                if (config.type !== 'COUNTDOWN') {
-                    ttlTimer= ttlTimer + config.seconds;
-                }
-            }
+            ttlRounds = context.counterConfig.filter( (x: { type: string; }) => x.type === 'WORK').length;
         }
         setTotalRounds(ttlRounds);
-        setTotalTimer(ttlTimer);
         setRound(0);
     }, [context.counterConfig]);
 
@@ -83,7 +74,6 @@ export default function Room() {
                                 <Counter
                                     totalRounds={ totalRounds }
                                     rounds={ round }
-                                    time={ totalTimer / 1000 }
                                 />)
                             : null
                         }
