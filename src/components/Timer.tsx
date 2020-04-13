@@ -10,18 +10,20 @@ const isToBeep = (actualSeconds: number, prevSeconds: number) => {
   );
 };
 
-const getCountdownString = (timeLeft: number) => {
+const getCountdownString = (timeLeft: number, inverseTimer: boolean) => {
   let countdownString = "";
   const minutes = Math.floor(Math.ceil(timeLeft) / 60);
   if (minutes) {
     if (minutes < 10) {
-      countdownString = countdownString + `0${minutes}:`;
+      countdownString += `0${minutes}:`;
     } else {
-      countdownString = countdownString + `${minutes}:`;
+      countdownString += `${minutes}:`;
     }
+  } else if (inverseTimer) {
+    countdownString += '00:';
   }
 
-  const seconds = Math.round(Math.ceil(timeLeft) % 60);
+  const seconds = inverseTimer ? Math.round(Math.floor(timeLeft) % 60) : Math.round(Math.ceil(timeLeft) % 60);
 
   if (seconds !== 60) {
     if (seconds < 10) {
@@ -44,12 +46,17 @@ const setTimer = (
 ) => {
   const start = Date.now();
   let prevContent = Number.MAX_SAFE_INTEGER;
-  let interval = setInterval(() => {
+  let interval: number;
+  const clear = () => {
+    if (interval) {
+      clearInterval(interval);
+    }
+  };
+  interval = setInterval(() => {
     const beepSound = document.getElementById("beep") as HTMLAudioElement;
 
     const playBeep = () => {
       if (beepSound) {
-        beepSound.load();
         beepSound.currentTime = 0;
         beepSound.play().catch((error) => {
           //safari browser sometimes throws a exception when play the sound (poop)
@@ -70,26 +77,32 @@ const setTimer = (
       playBeep();
     }
     if (diff <= 0) {
-      clearInterval(interval);
+      clear();
     }
     setContent(diff);
     prevContent = diff;
-    setBackgroundPct(((diff - 1) * 100) / time)
+    setBackgroundPct(((diff - 1) * 100) / time);
   }, 50);
+
+  return clear;
 };
 
 export default function Timer({
   label,
   time,
-  isAdmin,
+  advance,
   type,
   setBackgroundPct,
+  inverseTimer,
+  setInverseTimer
 }: {
   label: string;
   time: number;
-  isAdmin: boolean;
+  advance: () => void;
   type: string;
   setBackgroundPct: (pct: number) => void;
+  inverseTimer: boolean;
+  setInverseTimer: (inverseTimer: boolean) => void
 }) {
   const [synced, setSynced] = React.useState(false);
   const [content, setContent] = React.useState(time);
@@ -97,17 +110,18 @@ export default function Timer({
   React.useEffect(() => {
     setSynced(false);
     setContent(time);
-    setTimer(time, setContent, type, setBackgroundPct);
+
+    return setTimer(time, setContent, type, setBackgroundPct);
   }, [label, setBackgroundPct, time, type]);
 
   // we don't want to wait a full second before the timer starts
 
   React.useEffect(() => {
-    if (isAdmin && Number.parseFloat(content.toFixed(1)) <= 0 && !synced) {
+    if (content <= 0 && !synced) {
       setSynced(true);
-      sync();
+      advance();
     }
-  }, [isAdmin, content, synced]);
+  }, [advance, content, synced]);
 
   return (
     <Flex
@@ -116,9 +130,34 @@ export default function Timer({
       alignItems="center"
       flex="1"
       alignSelf="center"
+      width="100%"
     >
       <h1 style={{ fontSize: "3rem" }}>{label}</h1>
-      <h1 style={{ fontSize: "4rem" }}>{getCountdownString(content)}</h1>
+      <Flex
+        justifyContent="space-evenly"
+        alignItems="center"
+        flex="1"
+        alignSelf="center"
+        width="100%"
+      >
+        <h1 style={{ fontSize: "4rem" }}>
+          {type === "REST" || type === "WORK"
+            ? getCountdownString(
+                inverseTimer ? time - content : content,
+                inverseTimer
+              )
+            : getCountdownString(content, false)}
+        </h1>
+        {type === "REST" || type === "WORK" ? (
+          <img
+            src={
+              inverseTimer ? "./assets/sort-inverse.svg" : "./assets/sort.svg"
+            }
+            style={{ height: "3rem" }}
+            onClick={() => setInverseTimer(!inverseTimer)}
+          />
+        ) : null}
+      </Flex>
     </Flex>
   );
 }

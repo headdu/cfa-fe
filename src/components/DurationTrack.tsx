@@ -17,9 +17,8 @@ export default function DurationTrack({
   value
 }: DurationTrackInterface) {
   const list = React.useRef(null);
-  const intersection = React.useRef(null);
 
-  const debouncedOnChange = debounce(250, onChange)
+  const debouncedOnChange = debounce(100, onChange);
 
   React.useEffect(() => {
 
@@ -49,6 +48,8 @@ export default function DurationTrack({
         observer.observe(child);
       });
     }
+
+    return () => observer.disconnect()
   }, [value, debouncedOnChange]);
 
   const renderNumberJSX = () => {
@@ -73,7 +74,7 @@ export default function DurationTrack({
 
   return (
     <div style={{ width: '50%', textAlign: 'center', height: "100%" }}>
-      <Heading>{qualifier}</Heading>
+      <Heading my={3}>{qualifier}</Heading>
       <ol
         style={{
           overflowY: "auto",
@@ -81,20 +82,11 @@ export default function DurationTrack({
           scrollSnapType: "y mandatory",
           listStyle: "none",
           padding: "0",
+          margin: 0,
         }}
         ref={list}
       >
         {renderNumberJSX()}
-        <div
-          ref={intersection}
-          style={{
-            position: "absolute",
-            top: 64,
-            height: 64,
-            left: 0,
-            right: 0,
-          }}
-        ></div>
       </ol>
     </div>
   );

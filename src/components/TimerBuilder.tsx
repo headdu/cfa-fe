@@ -1,6 +1,7 @@
 import React from "react";
-import { setTabata, setRest, ConfigItem, setConfig } from "../api";
 import { Flex, Button, Box } from "rebass";
+import { uuid } from "uuidv4";
+import { setTabata, setRest, ConfigItem, setConfig } from "../api";
 import TimerGroupCard from "./TimerGroupCard";
 
 interface Group {
@@ -9,6 +10,7 @@ interface Group {
   repeat: string;
   error?: boolean;
   hideField?: string;
+  id: string
 }
 
 const buildConfig = (groups: Group[]): ConfigItem[] => {
@@ -58,6 +60,7 @@ export default function TimerBuilder({ ...props }) {
         repeat: "1",
         error: false,
         hideField: "REST",
+        id: uuid()
       },
     ]);
   }, [updateGroups]);
@@ -70,6 +73,7 @@ export default function TimerBuilder({ ...props }) {
         rest: "",
         repeat: "1",
         error: false,
+        id: uuid(),
       },
     ]);
 
@@ -82,6 +86,7 @@ export default function TimerBuilder({ ...props }) {
         repeat: "1",
         error: false,
         hideField: "REST",
+        id: uuid(),
       },
     ]);
 
@@ -94,6 +99,7 @@ export default function TimerBuilder({ ...props }) {
         repeat: "1",
         error: false,
         hideField: "WORK",
+        id: uuid(),
       },
     ]);
 
@@ -128,7 +134,7 @@ export default function TimerBuilder({ ...props }) {
       <Box>
         {groups.map((g, idx) => (
           <TimerGroupCard
-            key={idx}
+            key={g.id}
             index={idx}
             {...g}
             updateGroup={updateSpecificGroup}
@@ -139,13 +145,13 @@ export default function TimerBuilder({ ...props }) {
       <Box>
         <Flex justifyContent="space-between">
           <Button variant="secondary" width="30%" onClick={addWork} my={2}>
-            Add work
+            Work
           </Button>
           <Button variant="secondary" width="30%" onClick={addRest} my={2}>
-            Add rest
+            Rest
           </Button>
           <Button variant="secondary" width="30%" onClick={addGroup} my={2}>
-            Add group
+            Interval
           </Button>
         </Flex>
 
