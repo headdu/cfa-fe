@@ -12,6 +12,9 @@ interface CounterContextProps {
   setAdmin: (bool: boolean) => void;
   resetConfig: () => void;
   advance: () => void;
+  warning: string;
+  onWarningClick: () => void;
+  setWarning: (warning: string, onWarningClick?: () => void) => void;
 }
 
 const CounterContext = React.createContext<CounterContextProps>({
@@ -24,7 +27,10 @@ const CounterContext = React.createContext<CounterContextProps>({
   isAdmin: false,
   setAdmin: (bool: boolean) => {},
   resetConfig: () => {},
-  advance: () => {}
+  advance: () => {},
+  warning: '',
+  onWarningClick: () => {},
+  setWarning: (warning: string) => {},
 });
 
 export default CounterContext

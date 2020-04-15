@@ -1,5 +1,4 @@
 import React from "react";
-import logo from "./logo.svg";
 import { ThemeProvider } from "emotion-theming";
 import theme from "./theme";
 import "./App.css";
@@ -9,6 +8,7 @@ import Home from "./components/Home";
 import Room from "./components/Room";
 import { Box } from "rebass";
 import { ConfigItem, sync } from "./api";
+import Warning from "./components/Warning";
 
 function App() {
   const [roomUuid, setRoomUuid] = React.useState("");
@@ -17,6 +17,15 @@ function App() {
   >(undefined);
   const [currentStep, setCurrentStep] = React.useState(0);
   const [isAdmin, setAdmin] = React.useState(false);
+  const [warning, setWarningMessage] = React.useState('');
+  const [onWarningClick, setOnWarningClick] = React.useState(() => () => {})
+
+  const setWarning = (message: string, onNewWarningClick?: () => void) => {
+    setWarningMessage(message);
+    if (onNewWarningClick) {
+      setOnWarningClick(() => onNewWarningClick)
+    }
+  }
 
   /**
    * Reset current config and round
@@ -60,6 +69,9 @@ function App() {
           setAdmin,
           resetConfig,
           advance,
+          warning,
+          onWarningClick,
+          setWarning
         }}
       >
         <ConnectionManager />
@@ -87,6 +99,7 @@ function App() {
           />
           <span style={{position: 'absolute', bottom: 16, left:16, fontSize: 11}}>V.0.0.3</span>
         </Box>
+        <Warning />
       </CounterContext.Provider>
     </ThemeProvider>
   );

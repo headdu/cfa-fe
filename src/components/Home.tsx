@@ -1,5 +1,5 @@
 import React, { FormEvent } from "react";
-import { Box, Heading, Flex, Button } from "rebass";
+import { Box, Flex, Button } from "rebass";
 import { Input } from "@rebass/forms";
 import { createRoom, joinRoom } from "../api";
 

@@ -1,4 +1,5 @@
-const socket = new WebSocket("wss://cf-aveiro.herokuapp.com");
+export const apiUrl = "wss://cf-aveiro.herokuapp.com";
+const socket = new WebSocket(apiUrl);
 
 export interface ConfigItem {
   label: string;
