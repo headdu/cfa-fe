@@ -85,7 +85,7 @@ function App() {
             controls
             style={{ display: "none" }}
           />
-          <span style={{position: 'absolute', bottom: 16, left:16, fontSize: 11}}>V.0.0.2</span>
+          <span style={{position: 'absolute', bottom: 16, left:16, fontSize: 11}}>V.0.0.3</span>
         </Box>
       </CounterContext.Provider>
     </ThemeProvider>
