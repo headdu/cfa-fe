@@ -1,9 +1,10 @@
 import React from "react";
-import { Box, Flex, Heading } from "rebass";
+import { Box, Flex, Heading, Button } from "rebass";
 import CounterContext from "../CounterContext";
 import Timer from "./Timer";
 import TimerBuilder from "./TimerBuilder";
 import Counter from "./Counter";
+import { setConfig } from "../api";
 
 export default function Room() {
   const context = React.useContext(CounterContext);
@@ -72,6 +73,24 @@ export default function Room() {
         justifyContent="space-between"
         flexDirection="column"
       >
+        {context.isAdmin && context.counterConfig?.length ? (
+          <Button
+            sx={{
+              width: 40,
+              height: 40,
+              borderRadius: 4,
+              position: "absolute",
+              top: 32,
+              left: 32,
+              padding: 0,
+            }}
+            onClick={() => setConfig([])}
+          >
+            <span role="img" aria-label="close">
+              ✖️
+            </span>
+          </Button>
+        ) : null}
         <Heading textAlign="center" fontSize={[5, 6]} my={2}>
           Room id: {context.roomUuid}
         </Heading>
