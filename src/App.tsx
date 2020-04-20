@@ -9,6 +9,8 @@ import Room from "./components/Room";
 import { Box } from "rebass";
 import { ConfigItem, sync } from "./api";
 import Warning from "./components/Warning";
+import packageJson from "../package.json";
+import { useClearCache } from "react-clear-cache";
 
 function App() {
   const [roomUuid, setRoomUuid] = React.useState("");
@@ -19,6 +21,13 @@ function App() {
   const [isAdmin, setAdmin] = React.useState(false);
   const [warning, setWarningMessage] = React.useState('');
   const [onWarningClick, setOnWarningClick] = React.useState(() => () => {})
+  const { isLatestVersion, emptyCacheStorage, latestVersion } = useClearCache();
+
+  React.useEffect(() => {
+    if (!isLatestVersion) {
+      emptyCacheStorage(latestVersion)
+    }
+  }, [emptyCacheStorage, isLatestVersion, latestVersion])
 
   const setWarning = (message: string, onNewWarningClick?: () => void) => {
     setWarningMessage(message);
@@ -97,7 +106,7 @@ function App() {
             controls
             style={{ display: "none" }}
           />
-          <span style={{position: 'absolute', bottom: 16, left:16, fontSize: 11}}>V.0.0.3</span>
+          <span style={{position: 'absolute', bottom: 16, left:16, fontSize: 11}}>{packageJson.version}</span>
         </Box>
         <Warning />
       </CounterContext.Provider>

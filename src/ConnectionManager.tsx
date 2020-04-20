@@ -29,7 +29,7 @@ export default function ConnectionManager() {
       case "sync":
         if (parsedMessage.round === 0) {
           context.resetConfig();
-        } else {
+        } else if (parsedMessage.round && parsedMessage.round > context.currentStep) {
           context.setCurrentStep(parsedMessage.round);
         }
         break;
