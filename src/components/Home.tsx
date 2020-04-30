@@ -1,27 +1,29 @@
-import React, { FormEvent } from "react";
+import * as React from "react";
 import { Box, Flex, Button } from "rebass";
 import { Input } from "@rebass/forms";
 import { createRoom, joinRoom } from "../api";
 
 export default function Home() {
   const [isJoining, setIsJoining] = React.useState(false);
-
+  const [name, setName] = React.useState('')
   React.useEffect(() => {
     //load background image before show the image
     const backgroundImage = new Image();
     backgroundImage.src = "./assets/black.jpg";
-    backgroundImage.onload = () => {
-      (document.getElementById(
-        "homeBackground"
-      ) as HTMLElement).style.opacity = "1";
-    };
+    const backgroundElement = document.getElementById(
+      "homeBackground"
+    ) as HTMLElement;
+    if (backgroundElement) {
+      backgroundImage.onload = () => {
+        backgroundElement.style.opacity = "1";
+      };
+    }
   }, []);
 
   const createRoomOnClick = () => {
-    createRoom();
+    createRoom(name);
     (document.getElementById("beep") as HTMLAudioElement).load();
   };
-
 
   return (
     <Box
@@ -29,7 +31,7 @@ export default function Home() {
       sx={{
         px: 4,
         py: 6,
-        opacity:0,
+        opacity: 0,
         display: "flex",
         flexDirection: "column",
         background: "grey url(./assets/black.jpg)",
@@ -46,7 +48,20 @@ export default function Home() {
         src="./assets/logo.svg"
         alt={"Crossfit Aveiro"}
       ></img>
-
+      <Input
+        id="name"
+        name="name"
+        type="text"
+        placeholder="My name"
+        onChange={e => setName(e.target.value)}
+        sx={{
+          width: "60%",
+          color: "white",
+          marginBottom: 32,
+          borderRadius: "20px",
+          alignSelf: 'center'
+        }}
+      />
       {isJoining ? (
         <Flex flex={1} alignItems="center">
           <Button
@@ -68,9 +83,9 @@ export default function Home() {
             style={{
               flex: 1,
             }}
-            onSubmit={(e: FormEvent<HTMLFormElement>) => {
+            onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
               e.preventDefault();
-              joinRoom((e.target as any)[0].value);
+              joinRoom((e.target as any)[0].value, name);
               (document.getElementById("beep") as HTMLAudioElement).load();
             }}
           >

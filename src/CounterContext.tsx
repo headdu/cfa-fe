@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 import { ConfigItem } from './api';
 
 interface CounterContextProps {
@@ -15,6 +15,10 @@ interface CounterContextProps {
   warning: string;
   onWarningClick: () => void;
   setWarning: (warning: string, onWarningClick?: () => void) => void;
+  timeUpdate?: number;
+  setTimeUpdate: (time?: number) => void;
+  leaderboard: {name: string, score: number}[];
+  setLeaderboard: (leaderboard: [{name: string, score: number}]) => void;
 }
 
 const CounterContext = React.createContext<CounterContextProps>({
@@ -28,9 +32,13 @@ const CounterContext = React.createContext<CounterContextProps>({
   setAdmin: (bool: boolean) => {},
   resetConfig: () => {},
   advance: () => {},
-  warning: '',
+  warning: "",
   onWarningClick: () => {},
-  setWarning: (warning: string) => {},
+  setWarning: (warning: string) => '',
+  timeUpdate: undefined,
+  setTimeUpdate: (time?: number) => '',
+  leaderboard: [],
+  setLeaderboard: (leaderboard: [{name: string, score: number}]) => {}
 });
 
 export default CounterContext

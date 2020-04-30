@@ -1,5 +1,9 @@
-export const apiUrl = "wss://cf-aveiro.herokuapp.com";
-const socket = new WebSocket(apiUrl);
+let socket: WebSocket;
+
+export const setBaseSocket = (newSocket: WebSocket) => {
+  socket = newSocket;
+};
+ping()
 
 export interface ConfigItem {
   label: string;
@@ -7,144 +11,187 @@ export interface ConfigItem {
   type: string;
 }
 
-export function createRoom() {
-  socket.send(JSON.stringify({ type: "create" }));
+export function createRoom(name: string) {
+  if (socket) {
+    socket.send(JSON.stringify({ type: "create", name }));
+  }
 }
 
-export function joinRoom(uuid: string) {
-  socket.send(JSON.stringify({ type: "join", uuid }));
+export function joinRoom(uuid: string, name: string) {
+  if (socket) {
+    socket.send(JSON.stringify({ type: "join", uuid, name }));
+  }
 }
 
 export function setConfig(config: ConfigItem[]) {
-  socket.send(
-    JSON.stringify({
-      type: "config",
-      config,
-    })
-  );
+  if (socket) {
+    socket.send(
+      JSON.stringify({
+        type: "config",
+        config,
+      })
+    );
+  }
+}
+
+export function closeGroup() {
+  if (socket) {
+    socket.send(
+      JSON.stringify({
+        type: "closeGroup",
+      })
+    );
+  }
+}
+
+export function updateLeaderboard(score: number) {
+  if (socket) {
+    socket.send(
+      JSON.stringify({
+        type: "updateLeaderboard",
+        score
+      })
+    );
+  }
+}
+
+export function clearLeaderboard() {
+  if (socket) {
+    socket.send(
+      JSON.stringify({
+        type: "clearLeaderboard",
+      })
+    );
+  }
 }
 
 export function setTabata() {
-  socket.send(
-    JSON.stringify({
-      type: "config",
-      config: [
-        {
-          label: "Countdown",
-          seconds: 10000,
-        },
-        {
-          label: "GO!",
-          seconds: 20000,
-          type: "WORK",
-        },
-        {
-          label: "Rest",
-          seconds: 10000,
-          type: "REST",
-        },
-        {
-          label: "GO!",
-          seconds: 20000,
-          type: "WORK",
-        },
-        {
-          label: "Rest",
-          seconds: 10000,
-          type: "REST",
-        },
-        {
-          label: "GO!",
-          seconds: 20000,
-          type: "WORK",
-        },
-        {
-          label: "Rest",
-          seconds: 10000,
-          type: "REST",
-        },
-        {
-          label: "GO!",
-          seconds: 20000,
-          type: "WORK",
-        },
-        {
-          label: "Rest",
-          seconds: 10000,
-          type: "REST",
-        },
-        {
-          label: "GO!",
-          seconds: 20000,
-          type: "WORK",
-        },
-        {
-          label: "Rest",
-          seconds: 10000,
-          type: "REST",
-        },
-        {
-          label: "GO!",
-          seconds: 20000,
-          type: "WORK",
-        },
-        {
-          label: "Rest",
-          seconds: 10000,
-          type: "REST",
-        },
-        {
-          label: "GO!",
-          seconds: 20000,
-          type: "WORK",
-        },
-        {
-          label: "Rest",
-          seconds: 10000,
-          type: "REST",
-        },
-        {
-          label: "GO!",
-          seconds: 20000,
-          type: "WORK",
-        },
-        {
-          label: "Rest",
-          seconds: 10000,
-          type: "REST",
-        },
-      ],
-    })
-  );
+  if (socket) {
+    socket.send(
+      JSON.stringify({
+        type: "config",
+        config: [
+          {
+            label: "Countdown",
+            seconds: 10000,
+          },
+          {
+            label: "GO!",
+            seconds: 20000,
+            type: "WORK",
+          },
+          {
+            label: "Rest",
+            seconds: 10000,
+            type: "REST",
+          },
+          {
+            label: "GO!",
+            seconds: 20000,
+            type: "WORK",
+          },
+          {
+            label: "Rest",
+            seconds: 10000,
+            type: "REST",
+          },
+          {
+            label: "GO!",
+            seconds: 20000,
+            type: "WORK",
+          },
+          {
+            label: "Rest",
+            seconds: 10000,
+            type: "REST",
+          },
+          {
+            label: "GO!",
+            seconds: 20000,
+            type: "WORK",
+          },
+          {
+            label: "Rest",
+            seconds: 10000,
+            type: "REST",
+          },
+          {
+            label: "GO!",
+            seconds: 20000,
+            type: "WORK",
+          },
+          {
+            label: "Rest",
+            seconds: 10000,
+            type: "REST",
+          },
+          {
+            label: "GO!",
+            seconds: 20000,
+            type: "WORK",
+          },
+          {
+            label: "Rest",
+            seconds: 10000,
+            type: "REST",
+          },
+          {
+            label: "GO!",
+            seconds: 20000,
+            type: "WORK",
+          },
+          {
+            label: "Rest",
+            seconds: 10000,
+            type: "REST",
+          },
+          {
+            label: "GO!",
+            seconds: 20000,
+            type: "WORK",
+          },
+          {
+            label: "Rest",
+            seconds: 10000,
+            type: "REST",
+          },
+        ],
+      })
+    );
+  }
 }
 
 export function setRest() {
-  socket.send(
-    JSON.stringify({
-      type: "config",
-      config: [
-        {
-          label: "Rest",
-          seconds: 60000,
-          type: "REST",
-        },
-      ],
-    })
-  );
+  if (socket) {
+    socket.send(
+      JSON.stringify({
+        type: "config",
+        config: [
+          {
+            label: "Rest",
+            seconds: 60000,
+            type: "REST",
+          },
+        ],
+      })
+    );
+  }
 }
 
 export function sync(nextRound: number) {
-  socket.send(
-    JSON.stringify({
-      type: "sync",
-      round: nextRound
-    })
-  );
+  if (socket) {
+    socket.send(
+      JSON.stringify({
+        type: "sync",
+        round: nextRound,
+      })
+    );
+  }
 }
 
 export function ping() {
   setInterval(() => {
-    if (socket.readyState === socket.OPEN) {
+    if (socket && socket.readyState === socket.OPEN) {
       socket.send(
         JSON.stringify({
           type: "ping",
@@ -153,7 +200,3 @@ export function ping() {
     }
   }, 5000);
 }
-
-socket.addEventListener("open", ping);
-
-export default socket;

@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { Flex } from "rebass";
 
 const isToBeep = (actualSeconds: number, prevSeconds: number) => {
@@ -42,9 +42,10 @@ const setTimer = (
   time: number,
   setContent: (content: number) => void,
   type: string,
-  setBackgroundPct: (pct: number) => void
+  setBackgroundPct: (pct: number) => void,
+  timeUpdate?: number
 ) => {
-  const start = Date.now();
+  const start = timeUpdate ? timeUpdate : Date.now();
   let prevContent = Number.MAX_SAFE_INTEGER;
   let interval: number;
   const clear = () => {
@@ -94,7 +95,8 @@ export default function Timer({
   type,
   setBackgroundPct,
   inverseTimer,
-  setInverseTimer
+  setInverseTimer,
+  timeUpdate
 }: {
   label: string;
   time: number;
@@ -102,7 +104,8 @@ export default function Timer({
   type: string;
   setBackgroundPct: (pct: number) => void;
   inverseTimer: boolean;
-  setInverseTimer: (inverseTimer: boolean) => void
+  setInverseTimer: (inverseTimer: boolean) => void;
+  timeUpdate?: number;
 }) {
   const [synced, setSynced] = React.useState(false);
   const [content, setContent] = React.useState(time);
@@ -110,9 +113,9 @@ export default function Timer({
   React.useEffect(() => {
     setSynced(false);
     setContent(time);
-
-    return setTimer(time, setContent, type, setBackgroundPct);
-  }, [label, setBackgroundPct, time, type]);
+    console.log(timeUpdate);
+    return setTimer(time, setContent, type, setBackgroundPct, timeUpdate);
+  }, [label, setBackgroundPct, time, type]); // eslint-disable-line
 
   // we don't want to wait a full second before the timer starts
 
@@ -131,6 +134,7 @@ export default function Timer({
       flex="1"
       alignSelf="center"
       width="100%"
+      style={{position: 'relative'}}
     >
       <h1 style={{ fontSize: "3rem" }}>{label}</h1>
       <Flex
