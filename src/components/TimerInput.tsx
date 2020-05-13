@@ -1,8 +1,8 @@
 import React, { HTMLProps } from "react";
-import ReactDOM from 'react-dom'
-import { Input } from "@rebass/forms";
-import DurationTrack from "./DurationTrack";
+import ReactDOM from "react-dom";
+import { Input, Label } from "@rebass/forms";
 import debounce from "lodash/fp/debounce";
+import { Flex } from "rebass";
 
 interface TimerInputProps extends HTMLProps<HTMLInputElement> {
   onPickerChange: (e: number) => void;
@@ -45,17 +45,20 @@ export default function TimerInput({
   ...props
 }: TimerInputProps) {
   const [isPickerOpen, setIsPickerOpen] = React.useState(false);
-  const [minutes, setMinutes] = React.useState<number | undefined>(() =>
+  const [minutes, setMinutes] = React.useState<number>(() =>
     value ? Math.floor(Number.parseInt(value as string)) / 60 : 0
   );
-  const [seconds, setSeconds] = React.useState<number | undefined>(() =>
+  const [seconds, setSeconds] = React.useState<number>(() =>
     value ? Number.parseInt(value as string) % 60 : 0
   );
 
   const debouncedPickerChange = debounce(250, onPickerChange);
 
   React.useEffect(() => {
-    if (Number.isInteger(minutes as number) || Number.isInteger(seconds as number)) {
+    if (
+      Number.isInteger(minutes as number) ||
+      Number.isInteger(seconds as number)
+    ) {
       const total = (minutes || 0) * 60 + (seconds || 0);
       debouncedPickerChange(total);
     }
@@ -81,7 +84,16 @@ export default function TimerInput({
                   right: 0,
                   bottom: 0,
                 }}
-                onClick={() => setIsPickerOpen(false)}
+                onClick={() => {
+                  if (
+                    minutes >= 0 &&
+                    minutes <= 60 &&
+                    seconds >= 0 &&
+                    seconds <= 60
+                  ) {
+                    setIsPickerOpen(false);
+                  }
+                }}
               ></div>
               <div
                 style={{
@@ -94,25 +106,60 @@ export default function TimerInput({
                   display: "flex",
                   borderTopRightRadius: 10,
                   borderTopLeftRadius: 10,
-                  
                 }}
                 className="animate-scroll-up"
               >
-                <DurationTrack
-                  qualifier={"Minutes"}
-                  numbers={numbers}
-                  value={minutes}
-                  onChange={setMinutes}
-                />
-                <DurationTrack
-                  qualifier={"Seconds"}
-                  numbers={numbers}
-                  value={seconds}
-                  onChange={setSeconds}
-                />
+                <Flex
+                  flex={1}
+                  flexDirection="column"
+                  alignItems="center"
+                  justifyContent="center"
+                  mx={3}
+                >
+                  <Label htmlFor={`track-minutes`}>Number of Minutes</Label>
+                  <Input
+                    id={"track-minutes"}
+                    sx={{
+                      height: 40,
+                      alignSelf: "center",
+                    }}
+                    value={minutes}
+                    type="number"
+                    min="0"
+                    max="60"
+                    placeholder={"Number of Minutes"}
+                    onChange={(e) =>
+                      setMinutes(Number.parseInt(e.currentTarget.value))
+                    }
+                  />
+                </Flex>
+                <Flex
+                  flex={1}
+                  flexDirection="column"
+                  alignItems="center"
+                  justifyContent="center"
+                  mx={3}
+                >
+                  <Label htmlFor={`track-seconds`}>Number of Seconds</Label>
+                  <Input
+                    id={"track-seconds"}
+                    sx={{
+                      height: 40,
+                      alignSelf: "center",
+                    }}
+                    value={seconds}
+                    type="number"
+                    min="0"
+                    max="60"
+                    placeholder={"Number of Seconds"}
+                    onChange={(e) =>
+                      setSeconds(Number.parseInt(e.currentTarget.value))
+                    }
+                  />
+                </Flex>
               </div>
             </>,
-            document.getElementsByTagName('body')[0]
+            document.getElementsByTagName("body")[0]
           )
         : null}
     </>

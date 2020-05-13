@@ -1,10 +1,12 @@
-import React from "react";
+import * as React from "react";
 import { Box, Flex, Heading, Button } from "rebass";
 import CounterContext from "../CounterContext";
 import Timer from "./Timer";
 import TimerBuilder from "./TimerBuilder";
 import Counter from "./Counter";
-import { setConfig } from "../api";
+import { setConfig, closeGroup, leaveRoom } from "../api";
+import Leaderboard from "./Leaderboard";
+import RepCounter from "./RepCounter";
 
 export default function Room() {
   const context = React.useContext(CounterContext);
@@ -30,13 +32,19 @@ export default function Room() {
   const [round, setRound] = React.useState<number>(0);
 
   React.useEffect(() => {
-    if (
-      context.counterConfig &&
-      context.counterConfig[context.currentStep] &&
-      context.counterConfig[context.currentStep].type === "WORK"
-    ) {
-      setRound(round + 1);
+    let currentRound = 0;
+    if (context.counterConfig) {
+      for (let i = 0; i <= context.currentStep; i++) {
+        if (
+          context.counterConfig[i] &&
+          context.counterConfig[i].type === "WORK"
+        ) {
+          currentRound++;
+        }
+      }
     }
+
+    setRound(currentRound);
   }, [context.counterConfig, context.currentStep]); // eslint-disable-line react-hooks/exhaustive-deps
 
   React.useEffect(() => {
@@ -73,24 +81,49 @@ export default function Room() {
         justifyContent="space-between"
         flexDirection="column"
       >
-        {context.isAdmin && context.counterConfig?.length ? (
+        {context.isAdmin ? (
           <Button
             sx={{
-              width: 40,
               height: 40,
               borderRadius: 4,
               position: "absolute",
               top: 32,
               left: 32,
-              padding: 0,
+              padding: "0 8px",
             }}
-            onClick={() => setConfig([])}
+            onClick={
+              context.counterConfig?.length ? () => setConfig([]) : () => {
+                closeGroup();
+                context.setRoomUuid('')
+              }
+            }
           >
             <span role="img" aria-label="close">
-              ✖️
+              {context.counterConfig?.length ? "Clear" : "Close"}
             </span>
           </Button>
-        ) : null}
+        ) : (
+          <Button
+            sx={{
+              height: 40,
+              borderRadius: 4,
+              position: "absolute",
+              top: 32,
+              left: 32,
+              padding: "0 8px",
+            }}
+            onClick={
+              () => {
+                leaveRoom()
+                context.setRoomUuid('')
+              }
+            }
+          >
+            <span role="img" aria-label="close">
+              {"Leave"}
+            </span>
+          </Button>
+        )}
         <Heading textAlign="center" fontSize={[5, 6]} my={2}>
           Room id: {context.roomUuid}
         </Heading>
@@ -108,14 +141,20 @@ export default function Room() {
               setBackgroundPct={setBackgroundPct}
               inverseTimer={inverseTimer}
               setInverseTimer={setInverseTimer}
+              timeUpdate={context.timeUpdate}
             />
+            <RepCounter />
           </>
         ) : context.isAdmin ? (
           <>
+            <Leaderboard />
             <TimerBuilder />
           </>
         ) : (
-          <Heading>Waiting for Admin</Heading>
+          <>
+            <Leaderboard />
+            <Heading>Waiting for Admin</Heading>
+          </>
         )}
       </Flex>
     </Box>

@@ -1,7 +1,7 @@
 import React from "react";
 import { Flex, Button, Box } from "rebass";
 import { uuid } from "uuidv4";
-import { setTabata, setRest, ConfigItem, setConfig } from "../api";
+import { setTabata, setRest, ConfigItem, setConfig, clearLeaderboard } from "../api";
 import TimerGroupCard from "./TimerGroupCard";
 
 interface Group {
@@ -124,6 +124,11 @@ export default function TimerBuilder({ ...props }) {
     updateGroups(groups.filter((g, idx) => index !== idx));
   };
 
+  const doAndClearLeaderboard = (cb: () => void) => () => {
+    clearLeaderboard();
+    cb();
+  }
+
   return (
     <Flex
       flexDirection="column"
@@ -158,14 +163,14 @@ export default function TimerBuilder({ ...props }) {
         <Button
           width="100%"
           variant="primary"
-          onClick={startCurrentConfig}
+          onClick={doAndClearLeaderboard(startCurrentConfig)}
           my={2}
         >
           Start
         </Button>
         <Flex justifyContent="space-between" alignSelf="stretch" my={2}>
-          <Button onClick={setTabata}>Tabata</Button>
-          <Button onClick={setRest}>1 min Rest</Button>
+          <Button onClick={doAndClearLeaderboard(setTabata)}>Tabata</Button>
+          <Button onClick={doAndClearLeaderboard(setRest)}>1 min Rest</Button>
         </Flex>
       </Box>
     </Flex>

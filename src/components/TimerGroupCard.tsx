@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from "react";
+import * as React from "react";
 import { Card, Box, Button } from "rebass";
 import TimerInput from "./TimerInput";
 import { Label, Input } from "@rebass/forms";
@@ -50,7 +50,7 @@ export default function TimerGroupCard({
     }
   };
 
-  const onChangeRepeat = (val: ChangeEvent<HTMLInputElement>) => {
+  const onChangeRepeat = (val: React.ChangeEvent<HTMLInputElement>) => {
     updateGroup(
       {
         work,
