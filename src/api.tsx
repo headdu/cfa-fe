@@ -189,6 +189,16 @@ export function sync(nextRound: number) {
   }
 }
 
+export function leaveRoom() {
+  if (socket) {
+    socket.send(
+      JSON.stringify({
+        type: "userLeaveGroup"
+      })
+    )
+  }
+}
+
 export function ping() {
   setInterval(() => {
     if (socket && socket.readyState === socket.OPEN) {

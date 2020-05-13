@@ -4,7 +4,7 @@ import CounterContext from "../CounterContext";
 import Timer from "./Timer";
 import TimerBuilder from "./TimerBuilder";
 import Counter from "./Counter";
-import { setConfig, closeGroup } from "../api";
+import { setConfig, closeGroup, leaveRoom } from "../api";
 import Leaderboard from "./Leaderboard";
 import RepCounter from "./RepCounter";
 
@@ -89,15 +89,41 @@ export default function Room() {
               position: "absolute",
               top: 32,
               left: 32,
-              padding: '0 8px',
+              padding: "0 8px",
             }}
-            onClick={context.counterConfig?.length ? () => setConfig([]) : closeGroup}
+            onClick={
+              context.counterConfig?.length ? () => setConfig([]) : () => {
+                closeGroup();
+                context.setRoomUuid('')
+              }
+            }
           >
             <span role="img" aria-label="close">
-              {context.counterConfig?.length ? 'Clear' : 'Close'}
+              {context.counterConfig?.length ? "Clear" : "Close"}
             </span>
           </Button>
-        ) : null}
+        ) : (
+          <Button
+            sx={{
+              height: 40,
+              borderRadius: 4,
+              position: "absolute",
+              top: 32,
+              left: 32,
+              padding: "0 8px",
+            }}
+            onClick={
+              () => {
+                leaveRoom()
+                context.setRoomUuid('')
+              }
+            }
+          >
+            <span role="img" aria-label="close">
+              {"Leave"}
+            </span>
+          </Button>
+        )}
         <Heading textAlign="center" fontSize={[5, 6]} my={2}>
           Room id: {context.roomUuid}
         </Heading>
